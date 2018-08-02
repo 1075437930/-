@@ -1,0 +1,75 @@
+<!-- $Id: user_rank.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{if $full_page}
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<form method="post" action="" name="listForm">
+    <!-- start ads list -->
+    <div class="list-div" id="listDiv">
+        {/if}
+        <table cellspacing='1' id="list-table">
+            <tr>
+                <th>活动期号</th>
+                <th>团队额外奖励天数</th>
+                <th>团队总金额上限(万)</th>
+                <th>团队人数上限</th>
+                <th>返现时间（天）</th>
+                <th>奖励区间比例</th>
+                <th>队长额外奖励比例</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>是否开放</th>
+                <th>操作</th>
+            </tr>
+            {foreach from=$team_list item=team}
+            <tr>
+                <td class="first-cell" >{$team.stage_sn}</span></td>
+                <td class="first-cell" ><span>{$team.team_reward_day}</span></td>
+                <td class="first-cell" ><span>{$team.team_money_limit}</span></td>
+                <td class="first-cell" ><span>{$team.team_person_limit}</span></td>
+                <td class="first-cell" ><span>{$team.back_day}</span></td>
+                <td class="first-cell" ><span>{$team.extra_ratio}</span></td>
+                <td class="first-cell" ><span>{$team.captain_radio}</span></td>
+                <td class="first-cell" ><span>{$team.start_time}</span></td>
+                <td class="first-cell" ><span>{$team.end_time}</span></td>
+                <td class="first-cell" ><span>{$team.is_open}</span></td>
+                <td align="center">	 
+                    <a href="index.php?act=dcgroup&op=edit&amp;stage_id={$team.id}" title="{$lang.edit}">
+                        <img src="images/icon_edit.gif" border="0" height="16" width="16" />编辑
+                    </a>
+                    <a href="index.php?act=dcgroup&op=close_stage&amp;stage_id={$team.id}" title="{$lang.edit}">
+                        <img src="images/icon_edit.gif" border="0" height="16" width="16" />关闭
+                    </a>
+                    <a href="javascript:;" onclick="listTable.remove({$team.id}, '{$lang.drop_confirm}', 'remove')" title="{$lang.remove}">
+                        <img src="images/icon_drop.gif" border="0" height="16" width="16">删除
+                    </a>
+                </td>
+            </tr>
+            {foreachelse}
+            <tr><td class="no-records" colspan="15">暂无内容</td></tr>
+            {/foreach}
+            <tr>
+                <td align="right" nowrap="true" colspan="15">{include file="page.htm"}</td>
+            </tr>
+        </table>
+        {if $full_page}
+    </div>
+    <!-- end user ranks list -->
+</form>
+<script type="Text/Javascript" language="JavaScript">
+    listTable.recordCount = {$record_count};
+    listTable.pageCount = {$page_count};
+    listTable.act = "dcgroup";
+    listTable.query = "lists_query";
+    {foreach from=$filter item=item key=key}
+    listTable.filter.{$key} = '{$item}';
+    {/foreach}
+    {literal}
+    onload = function()
+    {
+    startCheckOrder();
+    }
+    {/literal}
+</script>
+{include file="pagefooter.htm"}
+{/if}

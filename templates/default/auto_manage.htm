@@ -1,0 +1,168 @@
+
+{if $full_page}
+{include file="pageheader.htm"}
+{insert_scripts files="js/utils.js,js/listtable.js"}
+
+{insert_scripts files="js/jquery-1.10.2.min_65682a2.js"}
+
+<!--時間選擇器必須的start-->
+<script>
+    var deleteck = '{$lang.deleteck}';
+    var deleteid = '{$lang.delete}';
+    // 这里把JS用到的所有语言都赋值到这里
+
+    {foreach from=$lang.calendar_lang key=key item=item}
+
+    var {$key} = "{$item}";
+
+    {/foreach}
+
+    //-->
+</script>
+<script type="text/javascript" src="{$urls_dir}/js/calendar/calendar.js"></script>
+<link href="{$urls_dir}/js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+<!--時間選擇器必須的end-->
+
+
+<!-- 品牌搜索start -->
+<div class="form-div">
+    <form action="javascript:search_brand()" name="searchForm">
+        <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+        商品名称<input type="text" name="cat_name" size="15" />
+        <input type="submit" value="{$lang.button_search}" class="button" />
+    </form>
+</div>
+<script language="JavaScript">
+    function search_brand(){
+        //搜索字段名cat_name  document.forms['searchForm'].elements['cat_name'].value是上面搜索表单里的name为cat_name的input的value
+        listTable.filter['cat_name'] = Utils.trim(document.forms['searchForm'].elements['cat_name'].value);
+
+        listTable.filter['page'] = 1;
+        listTable.loadList();
+    }
+</script>
+<!-- 品牌搜索end -->
+
+<form method="post" action="../../control/index.php" name="listForm" onsubmit="return confirm('{$lang.batch_drop_confirm}')">
+<!-- start brand list -->
+<div class="list-div" id="listDiv">
+{/if}
+  <table cellpadding="3" cellspacing="1">
+    <tr>
+        <th><input type="checkbox" class="pan" value="0">{$lang.trash_sn}</th>
+        <th>{$lang.goods_sn}</th>
+        <th>{$lang.lab_goods_name}</th>
+        <th>{$lang.sale_time}</th>
+        <th>{$lang.xia_time}</th>
+        <th>{$lang.cz}</th>
+    </tr>
+    {foreach from=$brand_list item=val}
+    <tr>
+
+        <td><input type="checkbox" value="{$val[item_id]}" class="plc">{$val[item_id]}</td>
+        <td>{$val[goods_sn]}</td>
+        <td>{$val[goods_name]}</td>
+        <td>{$val[starttime]}</td>
+        <td>{$val[endtime]}</td>
+
+        <td>
+            <a item_id="{$val[item_id]}" href="javascript:" class="dele">撤销</a>
+        </td>
+    </tr>
+    {foreachelse}
+    <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
+    {/foreach}
+    <tr>
+
+        <td>
+            <input type="hidden" name="op" value="" />
+            <input name="date" type="text" id="date" size="10" value='0000-00-00' readonly="readonly" />
+            <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('date', '%Y-%m-%d', false, false, 'selbtn1');" value="{$lang.btn_select}" class="button"/>
+        <input name="selbtn1" type="button" id="selbtn2"  value="{$lang.pls}" class="button" onclick="return validate()"/>
+            <input name="selbtn1" type="button" id="selbtn3"  value="{$lang.plx}" class="button" onclick="return validate1()"/>
+        </td>
+      <td align="right" nowrap="true" colspan="7">
+      {include file="page.htm"}
+      </td>
+    </tr>
+  </table>
+{if $full_page}
+<!-- end brand list -->
+</div>
+</form>
+
+<script type="text/javascript" language="javascript">
+  listTable.recordCount = {$record_count};
+  listTable.pageCount = {$page_count};
+  listTable.act = "goods_auto";
+  listTable.query = "type_query";
+  {foreach from=$filter item=item key=key}
+    listTable.filter.{$key} = '{$item}';
+  {/foreach}
+</script>
+
+<script>
+    $(function(){
+        $('body').on('click','.dele',function(e){
+            var cat_id=$(this).attr('item_id');
+
+            if(confirm('确定撤销吗？')){
+                location.href="index.php?act=goods_auto&op=auto_del&item_id="+cat_id
+            }
+            e.stopImmediatePropagation();
+        })
+    })
+
+    $('.plc').change(function(){
+//        alert($(this).val)
+          $('.pan').val(1)
+    });
+
+    function validate(){
+        if(document.listForm.elements["date"].value == "0000-00-00" ){
+            alert('请选择日期');
+            return false;
+        }else{
+            if($('.pan').val()==0){
+                alert('请选择要上架的商品');
+            }else{
+                var date=$('#date').val();
+
+                var str='';
+                $('.plc:checked').each(function(){
+                    str+=$(this).val()+','
+                });
+                str=str.substring(0,str.length-1);
+
+                location.href="index.php?act=goods_auto&op=pls&item_id="+str+"&date="+date;
+            }
+
+
+        }
+    }
+
+    function validate1(){
+        if(document.listForm.elements["date"].value == "0000-00-00" ){
+            alert('请选择日期');
+            return false;
+        }else{
+            if($('.pan').val()==0){
+                alert('请选择要上架的商品');
+            }else {
+                var date = $('#date').val();
+
+                var str = '';
+                $('.plc:checked').each(function () {
+                    str += $(this).val() + ','
+                });
+                str = str.substring(0, str.length - 1);
+
+                location.href = "index.php?act=goods_auto&op=plx&item_id=" + str + "&date=" + date;
+            }
+        }
+    }
+</script>
+
+{include file="pagefooter.htm"}
+
+{/if}

@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>商之翼 管理中心 - 大师分类列表 </title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="{$urls_dir}/styles/general.css" rel="stylesheet" type="text/css" />
+    <link href="{$urls_dir}/styles/main.css" rel="stylesheet" type="text/css" />
+    <link href="{$urls_dir}/styles/chosen/chosen.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="{$urls_dir}/js/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="{$urls_dir}/js/transport.js"></script><script type="text/javascript" src="{$urls_dir}/js/common.js"></script>
+    <script type="text/javascript" src="{$urls_dir}/js/jquery-1.10.1.js"></script>
+    <script src="{$urls_dir}/js/layer/layer.js"></script>
+</head>
+<body>
+<h1>
+    <span class="action-span"><a href="index.php?act=master&op=master_type_add">添加大师分类</a></span>
+    <span class="action-span1"><a href="index.php?act=main">商之翼 管理中心</a> </span><span id="search_id" class="action-span1"> - 大师分类列表 </span>
+    <div style="clear:both"></div>
+</h1>
+<script type="text/javascript" src="{$urls_dir}//js/utils.js"></script><script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script><script type="text/javascript" src="{$urls_dir}/js/placeholder.js"></script><div class="form-div">
+    <form action="index.php?act=master&op=master_type_list" method="post" name="searchForm">
+        大师分类名称&nbsp;
+        <span style="position:relative"><input type="text" name="keywords" value="{$keywords}" placeholder="大师分类名称" /></span>
+        <input type="submit" class="button" value=" 搜索 " />
+    </form>
+</div>
+    <div class="list-div" id="listDiv">
+        <table cellpadding="3" cellspacing="1">
+            <tr>
+                <th>
+
+                    <a href="index.php?act=master&op=master_type_list&sort={$sort}&pagesize={$pagesize}&newpage={$newpage}&keywords={$keywords}">编号</a>
+                    <img src="images/sort_{$sort}.gif">				</th>
+                <th>大师分类名字</th>
+                <th>大师分类图</th>
+                <th>
+                    <a href="index.php?act=master&op=master_type_list&sort={$sort}&pagesize={$pagesize}&keywords={$keywords}">大师添加时间</a>
+                </th>
+                <th>分类状态</th>
+                <th>操作</th>
+            </tr>
+            {foreach from=$res item=v}
+            <tr align="center" id="tb_{$v.id}">
+                <td>
+
+                    		{$v.id}</td>
+                <td class="first-cell">{$v.master_type}</td>
+                <td><img width="50" height="50" src="{$v.pic}" alt=""></td>
+                <td>{$v.addtime}</td>
+                <td>
+                    <input type="hidden" value="{$v.status}" id="hid_{$v.id}">
+                    {if $v.status eq 1}
+                    <img onclick="changestatus({$v.id})" src="./images/ture.png" class="img_{$v.id}" style="width: 20px;height: 20px" alt="">
+                    {else}
+                    <img onclick="changestatus({$v.id})" src="./images/false.png" class="img_{$v.id}" style="width: 20px;height: 20px" alt="">
+                    {/if}
+
+                </td>
+                <td align="center">
+                    <a href="javascript:update_master_type({$v.id})" title="编辑">
+                        <img src="images/icon_edit.gif" border="0" height="16" width="16" />
+                    </a>
+                    <a href="javascript:del_master_type({$v.id})" title="移除">
+                        <img src="images/icon_drop.gif" border="0" height="16" width="16" />
+                    </a>
+                </td>
+            </tr>
+            {/foreach}
+        </table>
+    </div>
+<form method="post" action="index.php?act=master&op=master_type_list&keywords={$keywords}">
+    <div style="height: 50px;float: right; line-height: 50px">
+        总计{$len}个记录
+        分为{$totpage}页
+        当前第{$newpage}页，
+        每页 <input type="text" value="{$pagesize}" id="pagesize" name='pagesize' style="width: 30px;height: 25px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+        <a href="index.php?act=master&op=master_type_list&pagesize={$pagesize}&keywords={$keywords}">第一页</a>&nbsp;&nbsp;&nbsp;
+        <a href="index.php?act=master&op=master_type_list&newpage={$lowpage}&pagesize={$pagesize}&keywords={$keywords}">上一页</a>&nbsp;&nbsp;&nbsp;
+        <a href="index.php?act=master&op=master_type_list&newpage={$addpage}&pagesize={$pagesize}&keywords={$keywords}">下一页</a>&nbsp;&nbsp;&nbsp;
+        <a href="index.php?act=master&op=master_type_list&pagesize={$pagesize}&newpage={$totpage}&keywords={$keywords}">最末页</a>&nbsp;&nbsp;&nbsp;
+        跳转到
+        <input type="text" value="" name="newpage" id="go" style="width: 30px;height: 25px">&nbsp;&nbsp;&nbsp;
+        <input type="submit" value="GO">
+    </div>
+</form>
+</body>
+</html>
+<script>
+    function add_type(){
+        layer.open({
+            type:2,
+            title:"添加大师分类",
+            shadeClose: true,
+            shade: false,
+            area: ['400px', '300px'],
+            content: ["index.php?act=master&op=master_type_add", 'no']
+        })
+    }
+    function del_master_type(id){
+        $.post("index.php?act=master&op=master_type_remove",{id:id},function(data){
+            if(data.status > 0){
+                $("#tb_"+id).remove();
+                layer.alert("删除成功",{icon:6});
+            }else if(data.status == -1){
+                layer.alert("删除失败",{icon:5});
+            }else{
+                layer.alert("该分类下有大师不能删除",{icon:5});
+            }
+        },'json')
+    }
+    function update_master_type(id){
+        layer.open({
+            type:2,
+            title:"编辑大师分类",
+            shadeClose: true,
+            shade: false,
+            area: ['600px', '600px'],
+            content: ["index.php?act=master&op=master_type_edit&id="+id, 'no']
+        })
+    }
+    $("#pagesize").keyup(function(){
+        var pagesize = $("#pagesize").val();
+        if(isNaN(pagesize)){
+            $("#pagesize").val("1");
+        }
+    })
+    $("#go").keyup(function(){
+        var go = $("#go").val();
+        if(isNaN(go)){
+            $("#go").val("1");
+        }
+    })
+
+
+
+    function changestatus(id){
+        var status =  $("#hid_"+id).val();
+        if(status == 1 ){
+            $("#hid_"+id).val(0);
+        }else{
+            $("#hid_"+id).val(1);
+        }
+        var newstatus =  $("#hid_"+id).val();
+        $.post("index.php?act=master&op=update_type_status",{id:id,status:newstatus},function(data){
+            if(data.status > 0){
+                if( $("#hid_"+id).val() == 0 ){
+                    $(".img_"+id).attr("src","{$urls_dir}/images/false.png");
+                }else{
+                    $(".img_"+id).attr("src","{$urls_dir}/images/ture.png");
+                }
+            }else{
+                if($("#hid_"+id).val() == 0){
+                    $("#hid_"+id).val(1);
+                }else{
+                    $("#hid_"+id).val(0);
+                }
+            }
+        },"json")
+    }
+</script>
+

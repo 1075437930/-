@@ -1,0 +1,69 @@
+<!-- $Id: tag_edit.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/validator.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/transport.org.js"></script>
+<div class="main-div">
+<form method="post" action="index.php" name="theForm" onSubmit="return validate()">
+<table cellspacing="1" cellpadding="3" width="100%">
+  <tr>
+    <td class="label">提问问题</td>
+    <td>
+        <textarea rows="5" cols="30" name="questions_name" id="questions_name" maxlength="200" placeholder="请添加想要问的问题">{$askinto.questions}</textarea><span class="require-field">*</span>
+    </td>
+</tr>
+
+    <tr>
+        <td class="label">关键字</td>
+        <td>
+            <textarea rows="3" cols="30" name="questions_key" id="questions_key" maxlength="200" placeholder="请添加问题的关键字">{$askinto.keyword}</textarea><span class="require-field">*关键字之间用 | 隔开 </span>
+        </td>
+    </tr>
+
+
+	<tr>
+	  <td class="label">问题分类</td>
+	  <td><select name="ask_class" id="ask_class">
+		<option value="0" selected="selected">请选择分类</option>
+		{foreach from=$classlist item=cls key=key}
+      {foreach from=$cls item=cl}
+        <option value="{$key}" >{$cl}</option>
+      {/foreach}
+    {/foreach}
+	  </select></td>
+	</tr>
+  <tr>
+    <td class="label">问题解答</td>
+    <td><textarea rows="10" cols="30" name="answers_cent" id="answers_cent" maxlength="200" placeholder="请添问题解答答案">{$askinto.answers}</textarea><span class="require-field">*</span>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <input type="submit" class="button" value="{$lang.button_submit}" />
+      <input type="reset" class="button" value="{$lang.button_reset}" />
+      <input type="hidden" name="askid" value="{$askinto.ask_id}" /></td>
+      <input type="hidden" name="act" value="askset" />
+      <input type="hidden" name="op" value="{$form_op}" />
+  </tr>
+</table>
+</form>
+</div>
+
+{literal}
+<script language="JavaScript">
+
+/**
+ * 检查表单输入的数据
+ */
+function validate()
+{
+    validator = new Validator("theForm");
+    validator.required('questions_name', '问题不能为空');
+	validator.required('answers_cent', '答案不能为空');
+	validator.required('questions_key', '关键字不能为空');
+    return validator.passed();
+}
+
+//-->
+</script>
+{/literal}
+{include file="pagefooter.htm"}

@@ -1,0 +1,117 @@
+{if $full_page}
+{include file="pageheader.htm"}
+{insert_scripts files="js/utils.js,js/listtable.js"}
+
+<script>
+var deleteck = '{$lang.deleteck}';
+var deleteid = '{$lang.delete}';
+// 这里把JS用到的所有语言都赋值到这里
+
+{foreach from=$lang.calendar_lang key=key item=item}
+
+var {$key} = "{$item}";
+
+{/foreach}
+
+//-->
+</script>
+<script type="text/javascript" src="{$urls_dir}/js/calendar/calendar.js"></script>
+<link href="{$urls_dir}/js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+<div class="form-div">
+{if !$crons_enable}
+<ul style="padding:0; margin: 0; list-style-type:none; color: #CC0000;">
+  <li style="border: 1px solid #CC0000; background: #FFFFCC; padding: 10px; margin-bottom: 5px;" >{$lang.enable_notice}</li>
+</ul>
+{/if}
+<form action="javascript:searchArticle()" name="searchForm" method="post">
+  {$lang.goods_name}
+  <input type="hidden" name="act" value="list" />
+  <input name="keyword" type="text" size="25" /> 
+  <input type="submit" value="{$lang.button_search}" class="button" />
+</form>
+</div>
+<form method="post" action="index.php" name="listForm" >
+<div class="list-div" id="listDiv">
+  {/if}
+
+<table cellspacing='1' cellpadding='3'>
+<tr>
+  <th width="5%"><input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox">{$lang.id}</th>
+  <th>{$lang.article_numbe}</th>
+  <th>{$lang.goods_name}</th>
+  <th>{$lang.img_url}</th>
+  <th width="25%">{$lang.starttime}</th>
+  <th width="10%">{$lang.handler}</th>
+</tr>
+{foreach from=$goodsdb item=val}
+<tr>
+  <td><input name="checkboxes[]" type="checkbox" value="{$val.goods_id}" />{$val.goods_id}</td>
+  <td>{$val.goods_sn}</td>
+  <td>{$val.goods_name}</td>
+  <td><img src="{$val.img_urls}" width="40" height="40" border="0" /></td>
+  <td align="center">
+  <span onclick="listTable.edit(this, 'edit_starttime', '{$val.goods_id}');showCalendar(this.firstChild, '%Y-%m-%d', false, false, this.firstChild)"><!-- {if $val.starttime} -->{$val.starttime}<!-- {else} -->0000-00-00<!-- {/if} --></span>
+</td>                                                                      
+  <td align="center">
+      <span id="del{$val.goods_id}">
+        {if $val.endtime || $val.starttime}
+          <a href="index.php?act=articleauto&op=deleteck&goods_id={$val.goods_id}" onclick="return confirm('{$lang.deleteck}');">{$lang.delete}</a>
+        {else}
+          -
+        {/if}
+      </span>
+  </td>
+</tr>
+    {foreachelse}
+    <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
+{/foreach}
+</table>
+{if $full_page}
+{/if}
+<table id="page-table" cellspacing="0">
+  <tr>
+    <td>
+      <input type="hidden" name="act" value="{$form_act}" />
+      <input type="hidden" name="op" value="" />
+      <input name="date" type="text" id="date" size="10" value='0000-00-00' readonly="readonly" />
+      <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('date', '%Y-%m-%d', false, false, 'selbtn1');" value="{$lang.btn_select}" class="button"/>
+      <input type="button" id="btnSubmit1" value="{$lang.button_start}" class="button" onClick="return validate('batch_start')" />
+    </td>
+    <td align="right" nowrap="true">
+    {include file="page.htm"}
+    </td>
+  </tr>
+</table>
+{if $full_page}
+</form>
+</div>
+<script type="Text/Javascript" language="JavaScript">
+listTable.recordCount = {$record_count};
+listTable.pageCount = {$page_count};
+listTable.query = "article_auto_query";
+listTable.act = "articleauto";
+{foreach from=$filter item=item key=key}
+listTable.filter.{$key} = '{$item}';
+{/foreach}
+
+function validate(name){
+  if(document.listForm.elements["date"].value == "0000-00-00"){
+    alert('其选择日期');
+    return false;	
+  }else{
+    document.listForm.op.value=name;
+    document.listForm.submit();
+  }
+}
+
+/* 搜索文章 */
+ function searchArticle()
+ {
+    listTable.filter.keyword = Utils.trim(document.forms['searchForm'].elements['keyword'].value);
+    listTable.filter.page = 1;
+    listTable.loadList();
+ }
+
+</script>
+{include file="pagefooter.htm"}
+{/if}

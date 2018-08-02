@@ -1,0 +1,109 @@
+<!-- $Id: third_customer_info.htm 2015-08-25 14:45:21Z langlibin $ -->{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/validator.js"></script>
+<form id="form1" method="post" action="index.php?act=third_customer&op={$form_op}" name="theForm" enctype="multipart/form-data">
+  <input type="hidden" id="cus_id" name="cus_id" value="{$third_customer.cus_id}" />
+  <div class="main-div">
+    <table id="group-table" cellspacing="1" cellpadding="3" width="100%">
+      <tr>
+        <td class="label">{$lang.label_cus_type}</td>
+        <td>
+          <select name="cus_type" class="required">
+            <option value="0" {if $third_customer.cus_type eq 0} selected {/if}>{$lang.qq}</option>
+            <option value="1" {if $third_customer.cus_type neq 0} selected {/if}>{$lang.ww}</option>
+            <option value="2" {if $third_customer.cus_type neq 0} selected {/if}>{$lang.meiqia}</option>
+            <option value="3" {if $third_customer.cus_type neq 0} selected {/if}>{$lang.taoyumall}</option></select>
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          <a href="javascript:showNotice('noticOfCusName');" title="{$lang.form_notice}">
+            <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}" /></a>{$lang.label_cus_name}</td>
+        <td>
+          <input type="text" id="cus_name" name="cus_name" size="22" value="{$third_customer.cus_name}" class="required" />
+          <br />
+          <span class="notice-span" {if $help_open}style="display: block" {else} style="display:none" {/if} id="noticOfCusName">{$lang.notice_of_cus_name}</span></td>
+      </tr>
+      <tr>
+        <td class="label">
+          <a href="javascript:showNotice('noticOfCusNo');" title="{$lang.form_notice}">
+            <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}" /></a>{$lang.label_cus_no}</td>
+        <td>
+          <input type="text" id="cus_no" name="cus_no" size="22" value="{$third_customer.cus_no}" class="required" />
+          <br />
+          <span class="notice-span" {if $help_open}style="display: block" {else} style="display:none" {/if} id="noticOfCusNo">{$lang.notice_of_cus_no}</span></td>
+      </tr>
+      <tr>
+        <td class="label">
+          <a href="javascript:showNotice('noticOfkefuid');" title="{$lang.form_notice}">
+            <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}" /></a>{$lang.label_cus_kefuid}</td>
+        <td>
+          <input type="text" id="cus_agentid" name="cus_agentid" size="22" value="{$third_customer.agentid}" class="required" />
+          <br />
+          <span class="notice-span" {if $help_open}style="display: block" {else} style="display:none" {/if} id="noticOfkefuid">{$lang.notice_of_kefuid}</span></td>
+      </tr>
+      <tr>
+        <td class="label">
+          <a href="javascript:showNotice('noticOfzuid');" title="{$lang.form_notice}">
+            <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}" /></a>{$lang.label_cus_zuid}</td>
+        <td>
+          <input type="text" id="cus_zuid" name="cus_zuid" size="22" value="{$third_customer.zuid}" class="required" />
+          <br />
+          <span class="notice-span" {if $help_open}style="display: block" {else} style="display:none" {/if} id="noticOfzuid">{$lang.notice_of_zuid}</span></td>
+      </tr>
+      <!--客服组名字-->
+      <tr>
+        <td class="label">
+          <a href="javascript:showNotice('noticOfzuid');" title="">
+            <img src="images/notice.gif" width="16" height="16" border="0" alt="" /></a>客服组名称</td>
+        <td>
+          <input type="text" id="cus_zuname" name="cus_zuname" size="22" value="{$third_customer.zuname}" class="required" />1是淘玉导购，2是珠宝定制，3是错金工艺，4是商家入住，5是售后服务，6是投诉建议
+          <br /></td></tr>
+      <!--客服组名字-->
+      <tr>
+        <td class="label">
+          <a href="javascript:showNotice('noticOfimgs');" title="{$lang.form_notice}">
+            <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}" /></a>客服组头像</td>
+        <td>
+          <input type="file" id="cus_imgs" name="cus_imgs" />
+          <br />
+          <div style="padding:10px 0px">{if $third_customer.kefu_avatar neq ''}
+            <img src="{$third_customer.kefu_avatar}" width="100" height="100" />{else}{$lang.zanwu}{/if}</div>
+          <br />
+          <span class="notice-span" {if $help_open}style="display: block" {else} style="display:none" {/if} id="noticOfimgs">{$lang.notice_of_imgs}</span></td>
+      </tr>
+      <tr>
+        <td class="label">
+          <a href="javascript:showNotice('noticOfbeizhu');" title="{$lang.form_notice}">
+            <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}" /></a>{$lang.label_cus_beizhu}</td>
+        <td>
+          <input type="text" id="cus_beizhu" name="cus_beizhu" size="22" value="{$third_customer.beizhu}" class="required" />
+          <br />
+          <span class="notice-span" {if $help_open}style="display: block" {else} style="display:none" {/if} id="noticOfbeizhu">{$lang.notice_of_beizhu}</span></td>
+      </tr>
+      <tr>
+        <td class="label">
+          <a href="javascript:showNotice('noticOfIsMaster');" title="{$lang.form_notice}">
+            <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}" /></a>{$lang.label_is_master}</td>
+        <td>
+          <input type="radio" id="is_master_1" name="is_master" value="1" size="30" {if $third_customer.is_master eq 1} checked="checked" {/if} />
+          <label for="cus_enable_1" style="vertical-align: middle;font:12px/24px verdana;">{$lang.yes}</label>
+          <input type="radio" id="is_master_0" name="is_master" value="0" size="30" {if $third_customer.is_master neq 1} checked="checked" {/if} />
+          <label for="cus_enable_0" style="vertical-align: middle;font:12px/24px verdana;">{$lang.no}</label>
+          <br />
+          <span class="notice-span" {if $help_open}style="display: block" {else} style="display:none" {/if} id="noticOfIsMaster">{$lang.notice_of_is_master}</span></td>
+      </tr>
+      <tr>
+        <td class="label">&nbsp;</td>
+        <td>
+          <input type="submit" id="btn_submit" name="btn_submit" value="{$lang.button_submit}" class="button" />
+          <input type="reset" value="{$lang.button_reset}" class="button" /></td>
+      </tr>
+    </table>
+  </div>
+</form>
+<script language="JavaScript">{
+    literal
+  } { / literal
+  }</script>{include file="pagefooter.htm"}

@@ -1,0 +1,317 @@
+<!-- $Id: diancang_order_info.htm 17060 2010-03-25 03:44:42Z liuhui $ --> 
+
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/topbar.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/common.js"></script>
+{if $user}
+<div id="topbar">
+  <div align="right"><a href="" onclick="closebar(); return false"><img src="images/close.gif" border="0" /></a></div>
+  <table width="100%" border="0">
+    <caption><strong> {$lang.buyer_info} </strong></caption>
+    <tr>
+      <td> 用户账号 </td>
+      <td> {$user.alias}</td>
+    </tr>
+    <tr>
+      <td> 账户余额</td>
+      <td> {$user.formated_user_money} </td>
+    </tr>
+    <tr>
+      <td> 在投金额 </td>
+      <td> {$user.allpic} </td>
+    </tr>
+	<tr>
+      <td> 优惠金额 </td>
+      <td> {$user.youpic}</td>
+    </tr>
+    <tr>
+      <td> 预计收益 </td>
+      <td> {$user.shouyi_pic} </td>
+    </tr>
+  </table>
+  {if $dcorder.goods_list}
+  <table width="100%" border="0">
+    <caption><strong> 在投产品 </strong></caption>
+    <tr>
+      <td> 产品编号 </td>
+      <td> {$goodsinto.goods_sn} </td>
+    </tr>
+    <tr>
+      <td> 产品图片 </td>
+      <td> <img src="{$goodsinto.imgurls}" width="30" height="30" border="0"  /> </td>
+    </tr>
+    <tr>
+      <td> 产品价格 </td>
+      <td> {$goodsinto.goods_amount} </td>
+    </tr>
+    <tr>
+      <td> 收益金额 </td>
+      <td> {$goodsinto.gyongjing_pic} </td>
+    </tr>
+    <tr>
+      <td> 年化率 </td>
+      <td> {$goodsinto.goods_bili}% </td>
+    </tr>
+	<tr>
+      <td> 投资时长 </td>
+      <td> {$goodsinto.yue_fen}/月</td>
+    </tr>
+	
+  </table>
+  {else}
+  <table width="100%" border="0">
+    <caption><strong> 在投产品 </strong></caption>
+    <tr>
+      <td> 产品编号 </td>
+      <td>  </td>
+    </tr>
+    <tr>
+      <td> 产品图片 </td>
+      <td>  </td>
+    </tr>
+    <tr>
+      <td> 产品价格 </td>
+      <td>  </td>
+    </tr>
+    <tr>
+      <td> 收益金额 </td>
+      <td>  </td>
+    </tr>
+    <tr>
+      <td> 年化率 </td>
+      <td> % </td>
+    </tr>
+  <tr>
+      <td> 投资时长 </td>
+      <td> /月</td>
+    </tr>
+  
+  </table>
+  {/if}
+</div>
+{/if}
+<form action="index.php?act=dcorder&op=operate" method="post" name="theForm">
+<div class="list-div" style="margin-bottom: 5px">
+<table width="100%" cellpadding="3" cellspacing="1">
+  <tr>
+    <td colspan="4">
+      <div align="center">
+        <input name="prev" type="button" class="button" onClick="location.href='index.php?act=dcorder&op=info&dcorder_id={$prev_id}';" value="{$lang.prev}" {if !$prev_id}disabled{/if} />
+        <input name="next" type="button" class="button" onClick="location.href='index.php?act=dcorder&op=info&dcorder_id={$next_id}';" value="{$lang.next}" {if !$next_id}disabled{/if} />
+	</div></td>
+  </tr>
+  <tr>
+    <th colspan="4">基本信息</th>
+  </tr>
+  <tr>
+    <td width="18%"><div align="right"><strong>订单号:</strong></div></td>
+    <td width="34%">{$dcorder.order_sn}</td>
+    <td width="15%"><div align="right"><strong>订单状态:</strong></div></td>
+    <td>{$dcorder.status}</td>
+  </tr>
+  <tr>
+    <td><div align="right"><strong>购货人：</strong></div></td>
+    <td>{$dcorder.user_name.alias} {if $dcorder.user_id > 0}[ <a href="" onclick="staticbar();return false;">{$lang.display_buyer}</a> ] {/if}</td>
+    <td><div align="right"><strong>下单时间：</strong></div></td>
+    <td>{$dcorder.formated_add_time}</td>
+  </tr>
+  <tr>
+    <td><div align="right"><strong>支付方式：</strong></div></td>
+    <td>{if $dcorder.pay_id > 0}{$dcorder.pay_name}{else}未获取{/if}</td>
+    <td><div align="right"><strong>付款时间：</strong></div></td>
+    <td>{$dcorder.pay_time}</td>
+  </tr>
+  <tr>
+    <td><div align="right"><strong>配送方式：</strong></div></td>
+    <td>{if $dcorder.shipping_id > 0}<span id="shipping_name">{$dcorder.shipping_name}</span>{else}未获得{/if}</td>
+    <td><div align="right"><strong>发货时间：</strong></div></td>
+    <td>{$dcorder.shipping_time}</td>
+  </tr>
+  <tr>
+    <td><div align="right"><strong>发货单号：</strong></div></td>
+    <td>{if $dcorder.shipping_id>0 and $dcorder.shipping_status>0}<span>{if $dcorder.invoice_no}<span id="invoice_no">{$dcorder.invoice_no}</span>{/if}</span><a href="index.php?act=dcorder&op=edit&dcorder_id={$dcorder.capital_orderid}&step=invoice_no" class="special">{$lang.edit}</a>{/if}</td>
+    <td><div align="right"><strong>订单来源：</strong></div></td>
+    <td>典藏</td>
+  </tr>
+
+  <tr>
+    <th colspan="4">收货人信息<a href="index.php?act=dcorder&op=edit&dcorder_id={$dcorder.capital_orderid}&step=consignee" class="special">{$lang.edit}</a></th>
+    </tr>
+  <tr>
+    <td><div align="right"><strong>收货人:</strong></div></td>
+    <td>{$dcorder.consignee}</td>
+    <td><div align="right"><strong>收货电话：</strong></div></td>
+	<td><span style="display: block">{$dcorder.tel}</span><span style="display: none">{$dcorder.tel1}</span><a href="javascript:" id="showtel">点击查看</a></td>
+  </tr>
+  <tr>
+    <td><div align="right"><strong>地址：</strong></div></td>
+    <td colspan="3">[{$dcorder.region}] {$dcorder.address|escape}</td>  
+  </tr>
+</table>
+</div>
+
+<div class="list-div" style="margin-bottom: 5px">
+<table width="100%" cellpadding="3" cellspacing="1">
+  <tr>
+    <th colspan="10" scope="col">商品信息</th>
+    </tr>
+  <tr>
+    <td scope="col" width="30%"><div align="center"><strong>商品名称</strong></div></td>
+    <td scope="col"><div align="center"><strong>售后</strong></div></td>
+	<td scope="col"><div align="center"><strong>产品图片</strong></div></td>
+    <td scope="col"><div align="center"><strong>货号</strong></div></td>
+    <td scope="col"><div align="center"><strong>价格</strong></div></td>
+	<td scope="col"><div align="center"><strong>代金卷优惠</strong></div></td>
+    <td scope="col"><div align="center"><strong>数量</strong></div></td>
+    <td scope="col"><div align="center"><strong>小计</strong></div></td>
+  </tr>
+
+  <tr>
+    <td>{$goods_intos.goods_name}</td>
+    <td>{$goods_intos.shouhou}</td>
+    <td><img src="{$goods_intos.imgurls}" width="30" height="30" border="0"  /></td>
+    <td>{$goods_intos.goods_sn}</td>
+    <td><div align="right">{$goods_intos.goods_amount}</div></td>
+	<td><div align="right">{$goods_intos.goods_youpic}</div></td>
+    <td><div align="right">1</div></td>
+    <td>{$goods_intos.order_amount}</td>
+  </tr>
+
+  <tr>
+    <td></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+	<td>&nbsp;</td>
+    <td><div align="right"><strong>{$lang.label_total}</strong></div></td>
+    <td><div align="right">{$dcorder.order_amount}</div></td>
+  </tr>
+</table>
+</div>
+<div class="list-div" style="margin-bottom: 5px">
+<table width="100%" cellpadding="3" cellspacing="1">
+  <tr>
+    <th>费用信息：</th>
+  </tr>
+  <tr>
+    <td><div align="right">商品总金额：<strong>{$dcorder.formated_goods_amount}</strong>- 优惠劵抵扣<strong>{$dcorder.formated_goods_youpic}</strong> +  配送费用：<strong>{$dcorder.formated_shipping_fee}</strong>
+      </div></td>
+  <tr>
+    <td><div align="right"> =订单总金额：<strong>{$dcorder.formated_order_amount}</strong></div></td>
+  </tr>
+  <tr>
+    <td><div align="right">
+       应付款金额：<strong>{$dcorder.formated_order_amount}</strong> - 使用余额： <strong>{$dcorder.formated_surplus}</strong>
+    </div></td>
+  <tr>
+    <td><div align="right"> = 已付款金额<strong>{$dcorder.formated_money_paid}</strong></div></td>
+  </tr>
+</table>
+</div>
+<div class="list-div" style="margin-bottom: 5px">
+<table cellpadding="3" cellspacing="1">
+  <tr>
+    <th colspan="6">操作信息</th>
+  </tr>
+  <tr>
+    <td><div align="right"><strong>操作备注：</strong></div></td>
+  <td colspan="5"><textarea name="action_note" cols="80" rows="3"></textarea></td>
+    </tr>
+  <tr>
+    <td><div align="right"></div>
+      <div align="right"><strong>{$lang.label_operable_act}</strong> </div></td>
+	<!-- 一键发货begin 修改 by www.taoyumall.com  -->  
+		{if $dcorder.pay_status == 1 && $dcorder.shipping_status == 0 && $dcorder.order_status == 1 }
+			<td colspan="2">
+				<input type="text" value="请输入快递单号" name="invoice_no"  style="color:#00F" />    
+				<input name="to_shipping" type="submit" style="color:#F00" value="一键发货" class="button" />
+			</td>
+			<td><div align="right"><strong style="color:#c00">若一键发货请忽略此操作</strong></div></td>
+			<td colspan="2">
+		{else}
+			<td colspan="5">
+		{/if}
+		
+		{if $operable_list.confirm}
+			<input name="confirm" type="submit" value="{$lang.op_confirm}" class="button" /><!--确认-->
+		{/if}
+		{if $operable_list.pay}
+			<input name="pay" type="submit" value="{$lang.op_pay}" class="button" /><!--支付-->
+		{/if}
+		{if $operable_list.unpay}
+			<input name="unpay" type="submit" class="button" value="{$lang.op_unpay}" /><!--设为未付款-->
+		{/if}
+		{if $operable_list.butui }
+			<input name="butui" type="submit" value="设置不退" class="button" /><!--设置不退-->
+		{/if}
+		{if $operable_list.unship}
+			<input name="unship" type="submit" value="{$lang.op_unship}" class="button" /><!--未发货-->
+		{/if} 
+		{if $operable_list.cancel && $shenhe neq 5}
+		  <input name="cancel" type="submit" value="{$lang.op_cancel}" class="button" /><!--取消-->
+		{/if} 
+		{if $operable_list.invalid}
+			<input name="invalid" type="submit" value="{$lang.op_invalid}" class="button" /><!--无效-->
+		{/if} 
+		
+		{if $operable_list.remove}
+			<input name="remove" type="submit" value="{$lang.remove}" class="button" onClick="return window.confirm('{$lang.js_languages.remove_confirm}');" /><!--删除-->
+		{/if}
+			<input name="dcorder_id" type="hidden" value="{$dcorder.capital_orderid}" />
+			</td>
+    </tr>
+  <tr>
+    <th>{$lang.action_user}</th>
+    <th>{$lang.action_time}</th>
+    <th>{$lang.order_status}</th>
+    <th>{$lang.pay_status}</th>
+    <th>{$lang.shipping_status}</th>
+    <th>{$lang.action_note}</th>
+  </tr>
+  {foreach from=$action_list item=action}
+  <tr>
+    <td><div align="center">{$action.action_user}</div></td>
+    <td><div align="center">{$action.action_time}</div></td>
+    <td><div align="center">{$action.order_status}</div></td>
+    <td><div align="center">{$action.pay_status}</div></td>
+    <td><div align="center">{$action.shipping_status}</div></td>
+    <td>{$action.action_note}</td>
+  </tr>
+  {/foreach}
+</table>
+</div>
+
+</form>
+{literal}
+<script language="JavaScript">
+{/literal}
+  var oldAgencyId = {$dcorder.agency_id|default:0};
+{literal}
+
+  $("#showtel").click(function(){
+    $.ajax({
+      type: "post",
+      url: "index.php?act=dcorder&op=check",
+      data: {},
+      dataType: "json",
+      success: function(data){
+        if(data.status == 1){
+          $("#showtel").prev().css("display",'block');
+          $("#showtel").prev().prev().css("display",'none');
+        }else{
+          alert("你没有权限");
+        }
+      }
+    });
+  })
+
+
+  
+</script>
+
+{/literal}
+
+{include file="pagefooter.htm"}

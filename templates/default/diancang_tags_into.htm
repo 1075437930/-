@@ -1,0 +1,36 @@
+<!-- $Id: ads_info.htm 14216 2008-03-10 02:27:21Z testyang $-->{include file="pageheader.htm"}
+<link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css"/>
+<div class="main-div">
+    <form action="index.php" method="post" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+        <table width="100%" id="general-table">
+            <tr>
+                <td class="label"><img src="images/notice.gif" width="16" height="16" border="0" alt="标签名称">标签名称<span
+                        class="require-field">*</span></td>
+                <td><input type="text" name="tags_name" value="{$tags_into.tags_name}" size="35"/></td>
+            </tr>
+            <tr>
+                <td class="label">&nbsp;</td>
+                <td>
+                <input type="submit" value="{$lang.button_submit}" class="button"/> 
+                <input type="reset" value="{$lang.button_reset}" class="button"/>
+                <input type="hidden" name="act" value="dctags"/> 
+                <input type="hidden" name="op" type="hidden" value="{$insert_or_update}" />
+                <input type="hidden" name="dctags_id" value="{$tags_into.tags_id}"/>
+               </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/validator.js"></script>
+<script language="JavaScript">    
+{literal}
+    /*** 检查表单输入的数据*/    
+    function validate() {
+        validator = new Validator("theForm");
+        validator.required("tags_name", '标签名称不能为空');
+        return validator.passed();
+    }
+{/literal}
+</script>
+{include file="pagefooter.htm"}

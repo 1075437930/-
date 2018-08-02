@@ -1,0 +1,163 @@
+{if $full_page}
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<style>
+.form-search{
+	width:50%;
+	display:inline-block;
+}
+.sorts-span-cls{
+	position:relative;
+	width:40%;
+	display:inline-block;
+	height:30px;
+	margin-top:0px;
+}
+.sorts-span-cls a{
+	display:inline-block;
+	line-height:30px;
+	width:17%;
+	font-weight:bold;
+}
+</style>
+<!-- 订单搜索 -->
+<div class="form-div">
+  <form action="javascript:searchOrder()" name="searchForm"  class="form-search">
+    <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />    
+    订单编号<input name="order_sn" type="text" id="order_sn" size="15">
+    用户名称<input name="consignee" type="text" id="consignee" size="15">
+    完成状态<select name="status_refund" id="order_type"><option value="-1">全部</option><option value="1" {if $filter.status_refund eq '1'}selected{/if}>已完成</option><option value="0" {if $filter.status_refund eq '0'}selected{/if}>未完成</option></select>
+    <input type="submit" value="{$lang.button_search}" class="button" />
+  </form>
+  <span class="sorts-span-cls">
+	<a href="javascript:sortOrder(5);">待商家审核({$cntSort[0]})</a>
+	<a href="javascript:sortOrder(10);">退回待收货({$cntSort[1]})</a>
+	<a href="javascript:sortOrder(50);">被取消申请({$cntSort[2]})</a>
+	<a href="javascript:sortOrder(40);">待商家退款({$cntSort[3]})</a>
+	<a href="javascript:sortOrder(60);">全部({$cntSort[4]})</a>
+  </span>
+</div>
+<!-- 订单列表 -->
+<form method="post" action="index.php?act=dcback&op=remove" name="listForm" onsubmit="return check()">
+  <div class="list-div" id="listDiv">
+{/if}
+
+<table cellpadding="3" cellspacing="1">
+  <tr>
+	<th>序号</th>
+    <th>订单号</th>
+	<th>产品名称</th>
+	<th>产品图片</th>
+    <th><a href="javascript:listTable.sort('add_time', 'DESC'); ">申请时间</a>{$sort_add_time}</th>
+	<th>退款金额</th>
+    <th>订单信息</th>
+    <th>退换状态</th>
+    <th>订单申请人</th>
+    <th>{$lang.handler}</th>
+  <tr>
+  {foreach from=$back_list item=back key=dkey}
+  <tr>
+	<td>{$back.back_id}</td>
+    <td>{$back.order_sn}</td>
+	<td>[ 编号：{$back.goods_sn} ] &nbsp; &nbsp; {$back.goods_name}</td>
+	<td><img src="{$back.goods_url}" width="40" height="40" border="0"  /></td>
+    <td align="center"  nowrap="nowrap">{$back.add_time}</td>
+	<td>支付金额:{$back.order_amount}<br>代金卷:{$back.goods_youpic}<br>应退款金额:{$back.refund_money}</td>
+    <td align="right" > {$back.consignee} <br>{$back.address}</td>
+    <td align="center"  nowrap="nowrap">{$back.status_back_val}</td>
+    <td align="center"  nowrap="nowrap">{$back.user_name}</td>
+    <td align="center"   nowrap="nowrap">
+     <a href="index.php?act=dcback&op=info&dcback_id={$back.back_id}">查看</a>
+     <br />
+        {if $back.look_goods}
+            <span style="color:#F00">看货退货</span>
+        {else}
+            <span>典藏退货</span>
+        {/if}
+	{if $back.status_back >=6 }
+      <a onclick="{if(confirm('{$lang.confirm_delete}')){return true;}return false;}" href="index.php?act=dcback&op=remove&back_id={$back.back_id}">{$lang.remove}</a>
+	{/if}
+    </td>
+  </tr>
+  {/foreach}
+</table>
+
+<!-- 分页 -->
+<table id="page-table" cellspacing="0">
+  <tr>
+    <td align="right" nowrap="true">
+    {include file="page.htm"}
+    </td>
+  </tr>
+</table>
+
+{if $full_page}
+  </div>
+ 
+</form>
+<script language="JavaScript">
+listTable.recordCount = {$record_count};
+listTable.pageCount = {$page_count};
+listTable.act = "dcback";
+listTable.query = "lists_query";
+{foreach from=$filter item=item key=key}
+listTable.filter.{$key} = '{$item}';
+{/foreach}
+{literal}
+
+    /**
+     * 搜索订单
+     */
+    function searchOrder()
+    {
+		listTable.filter['sort_index'] = -1;
+        listTable.filter['order_sn'] = Utils.trim(document.forms['searchForm'].elements['order_sn'].value);
+        listTable.filter['consignee'] = Utils.trim(document.forms['searchForm'].elements['consignee'].value);
+		listTable.filter['status_refund'] = document.forms['searchForm'].elements['status_refund'].value;
+        listTable.filter['page'] = 1;
+        listTable.query = "lists_query";
+        listTable.loadList();
+    }
+	
+	 /**
+     * 按分类显示订单
+     */
+    function sortOrder(index)
+    {
+		listTable.filter['sort_index'] = index;
+        listTable.filter['order_sn'] = Utils.trim(document.forms['searchForm'].elements['order_sn'].value);
+        listTable.filter['consignee'] = Utils.trim(document.forms['searchForm'].elements['consignee'].value);
+		listTable.filter['status_refund'] = document.forms['searchForm'].elements['status_refund'].value;
+        listTable.filter['page'] = 1;
+        listTable.query = "lists_query";
+        listTable.loadList();
+		
+    }
+
+    function check()
+    {
+      var snArray = new Array();
+      var eles = document.forms['listForm'].elements;
+      for (var i=0; i<eles.length; i++)
+      {
+        if (eles[i].tagName == 'INPUT' && eles[i].type == 'checkbox' && eles[i].checked && eles[i].value != 'on')
+        {
+          snArray.push(eles[i].value);
+        }
+      }
+      if (snArray.length == 0)
+      {
+        return false;
+      }
+      else
+      {
+        eles['order_id'].value = snArray.toString();
+        return true;
+      }
+    }
+</script>
+{/literal}
+
+{include file="pagefooter.htm"}
+{/if}

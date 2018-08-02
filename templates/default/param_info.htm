@@ -1,0 +1,86 @@
+<!-- $Id: goods_type_info.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/validator.js"></script>
+
+<div class="main-div">
+
+    <form action="index.php?act=param&op={$form_act}" method="post" name="theForm" onsubmit="return validate();">
+
+        <table cellspacing="1" cellpadding="3" width="100%">
+
+            <tr>
+
+                <td class="label">{$lang.ini_name}:</td>
+
+                <td><input type="text" id="ini_name" name="ini_name" value="{$param.ini_name|escape}" size="40" />
+
+                    {$lang.require_field}</td>
+
+            </tr>
+            <tr>
+
+                <td class="label">{$lang.ini_param}:</td>
+
+                <td><input type="text" id="ini_param" name="ini_param" value="{$param.ini_param|escape}" size="40" />
+
+                    {$lang.require_field}</td>
+
+            </tr>
+            <tr>
+
+                <td class="label">{$lang.ini_ramarks}:</td>
+
+                <td><input type="text" id="ini_remarks" name="ini_remarks" value="{$param.ini_remarks|escape}" size="40" />
+
+                    {$lang.require_field}</td>
+
+            </tr>
+            <tr align="center">
+
+                <td colspan="2">
+
+                    <input type="hidden" name="ini_id" value="{$param.ini_id}" />
+
+                    <input type="submit" value="{$lang.button_submit}" class="button" />
+
+                    <input type="reset" value="{$lang.button_reset}" class="button" />
+
+                </td>
+
+            </tr>
+
+        </table>
+
+    </form>
+
+</div>
+
+
+
+<script type="text/javascript">
+
+    onload = function () {
+
+        document.forms['theForm'].elements['ini_name'].focus();
+
+    }
+
+    function validate()
+    {
+        var param_name = document.getElementById('ini_name').value;
+        var param_ini = document.getElementById('ini_param').value;
+        if (param_name == '' || param_ini == '' || ini_remarks == '') {
+            alert('参数名字参数不能为空');
+            return false;
+        }
+    }
+
+
+</script>
+
+
+
+{include file="pagefooter.htm"}
+

@@ -1,0 +1,74 @@
+<!-- $Id: admin_logs.htm 15477 2008-12-22 03:44:50Z sunxiaodong $ -->
+
+{if $full_page}
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/calendar.php?lang={$cfg_lang}"></script>
+<link href="{$urls_dir}/js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+<div class="form-div">
+    <table>
+        <tr>
+            <td>
+                <form name="theForm" action="javascript:searchInfo()" >
+                    客服名字<input type="text" name="keyword" id="keyword" class="input_te" />
+                    <input type="submit" value="搜索" class="button" />
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!-- start admin_logs list -->
+<div class="list-div" id="listDiv">
+    {/if}
+
+    <table cellpadding="3" cellspacing="1">
+        <tr>
+            <th><a href="javascript:listTable.sort('log_id'); ">编号</a>{$sort_class_id}</th>
+            <th>客服名称</th>
+            <th>操作记录</th>
+            <th>操作时间</th>
+            <th>ip</th>
+        </tr>
+        {foreach from=$cus_log_list item=asks}
+        <tr width="100%">
+            <td width="3%" align="center"><span>{$asks.log_id}</span></td>
+            <td width="5%" align="center" class="first-cell">{$asks.alias}</td>
+            <td width="32%" align="left"><span>{$asks.log_info}</span></td>
+            <td width="18%" align="center"><span>{$asks.log_time}</span></td>
+            <td width="18%" align="center" width="200"><span>{$asks.ip_address}</span></td>
+        </tr>
+        {foreachelse}
+        <tr><td class="no-records" colspan="10">暂无内容,请添加问答</td></tr>
+        {/foreach}
+        <tr>
+            <td align="right" nowrap="true" colspan="6">{include file="page.htm"}</td>
+        </tr>
+    </table>
+
+    
+</div>
+<!-- end ad_position list -->
+{if $full_page}
+<script type="text/javascript" language="JavaScript">
+    listTable.recordCount = {$record_count};
+    listTable.pageCount = {$page_count};
+    listTable.query = "cus_log_query";
+    listTable.act = "askset";
+    {foreach from=$filter item=item key=key}
+    listTable.filter.{$key} = '{$item}';
+    {/foreach}
+    {literal}
+    {/literal}
+
+
+    function searchInfo()
+    {
+        listTable.filter['keyword'] = Utils.trim(document.forms['theForm'].elements['keyword'].value);
+        listTable.filter['page'] = 1;
+        listTable.loadList();
+    }
+</script>
+{include file="pagefooter.htm"}
+{/if}

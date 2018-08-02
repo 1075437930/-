@@ -1,0 +1,186 @@
+<!-- $Id: goods_list.htm 17126 2010-04-23 10:30:26Z liuhui $ -->
+
+{if $full_page}
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+
+<!-- 商品搜索 -->
+<div class="form-div">
+    <form action="javascript:searchGoods()" name="searchForm">
+        <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+        <!-- 分类 -->
+
+        <select id="cat_id" name="cat_id">
+            <option value="0">{$lang.all_cat}</option>
+            {$cat_list}
+        </select>
+        <!-- 品牌 -->
+        <select  class="chzn-select" id="brand_id" name="brand_id"><option value="0">{$lang.goods_brand}</option>{html_options options=$brand_list}</select>
+         <!-- 商家 -->
+        <select  class="chzn-select" id="supplier_id" name="supplier_id"><option value="0">{$lang.goods_supplier}</option>{html_options options=$supplie_list}</select>
+         <!-- 商家审核状态 -->
+        <select  class="chzn-select" id="supplier_status" name="supplier_status">
+            <option value="">{$lang.supplier_status}</option>
+            <option value="0">未审核</option>
+            <option value="1">审核通过</option>
+            <option value="-1">审核未通过</option>
+        </select>
+        <!-- 关键字 -->
+        关键字 <input type="text" name="keyword" size="15" />
+        <input type="submit" value="{$lang.button_search}" class="button" />
+    </form>
+</div>
+<script language="JavaScript">
+ 
+    function searchGoods(){
+        listTable.filter['cat_id'] = document.forms['searchForm'].elements['cat_id'].value;
+        listTable.filter['brand_id'] = document.forms['searchForm'].elements['brand_id'].value;
+        listTable.filter['supplier_id'] = document.forms['searchForm'].elements['supplier_id'].value;
+        listTable.filter['keyword'] = Utils.trim(document.forms['searchForm'].elements['keyword'].value);
+        listTable.filter['page'] = 1;
+        listTable.loadList();
+    }
+</script>
+<!-- 商品列表 -->
+<form method="post" action="index.php" name="listForm" onsubmit="return confirmSubmit(this)">
+  <!-- start goods list -->
+  <div class="list-div" id="listDiv">
+{/if}
+<table cellpadding="3" cellspacing="1">
+  <tr>
+    <th>
+      <input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox" />
+      <a href="javascript:listTable.sort('goods_id'); ">{$lang.record_id}</a>{$sort_goods_id}
+    </th>
+    <th>图片</th>
+    <th><a href="javascript:listTable.sort('supplier_name'); ">供货商家</a>{$sort_supplier_name}</th>
+    <th>{$lang.goods_name}</th>
+    <th>{$lang.goods_sn}</th>
+    <th><a href="javascript:listTable.sort('shop_price'); ">商城价格</a>{$sort_shop_price}</th>
+    <th><a href="javascript:listTable.sort('add_time'); ">上架时间</a>{$sort_add_time}</th><!--手机专享价格   app  jx-->
+    <th><a href="javascript:listTable.sort('last_update'); ">修改时间</a>{$sort_last_update}</th><!--手机专享价格   app  jx-->
+    <th><a href="javascript:listTable.sort('is_on_sale'); ">{$lang.is_on_sale}</a>{$sort_is_on_sale}</th>
+    <th><a href="javascript:listTable.sort('is_best'); ">{$lang.is_best}</a>{$sort_is_best}</th>
+    <th><a href="javascript:listTable.sort('is_new'); ">{$lang.is_new}</a>{$sort_is_new}</th>
+    <th><a href="javascript:listTable.sort('is_hot'); ">{$lang.is_hot}</a>{$sort_is_hot}</th>
+    <th><a href="javascript:listTable.sort('is_tiejia'); ">{$lang.is_tiejia}</a>{$sort_is_tiejia}</th>
+    <th><a href="javascript:listTable.sort('sort_order'); ">{$lang.sort_order}</a>{$sort_sort_order}</th>
+    <th>审核状态</th>
+    <th><a href="javascript:listTable.sort('goods_number'); ">{$lang.goods_number}</a>{$sort_goods_number}</th>
+    <th>{$lang.handler}</th>
+  <tr>
+  {foreach from=$goods_list item=goods}
+  <tr>
+    <td><input type="checkbox" name="checkboxes[]" value="{$goods.goods_id}" />{$goods.goods_id}</td>
+    <td><img src="{$goods.goods_thumb}" width="40" height="40" border="0" /></td>
+    <td><span>{$goods.supplier_name}</span></td>
+    <td class="first-cell" style="{if $goods.is_promote}color:red;{/if}"><span>{$goods.goods_name}</span></td>
+    <td><span onclick="listTable.edit(this, 'edit_goods_sn', {$goods.goods_id})">{$goods.goods_sn}</span></td>
+    <td align="right"><span>{$goods.shop_price}</span></td>
+    <td align="right"><span>{$goods.add_time}</span></td>
+    <td align="right"><span>{$goods.last_update}</span></td>
+    <td align="center"><img src="images/{if $goods.is_on_sale}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_on_sale', {$goods.goods_id})" /></td>
+    <td align="center"><img src="images/{if $goods.is_best}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_best', {$goods.goods_id})" /></td>
+    <td align="center"><img src="images/{if $goods.is_new}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_new', {$goods.goods_id})" /></td>
+    <td align="center"><img src="images/{if $goods.is_hot}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_hot', {$goods.goods_id})" /></td>
+    <td align="center"><img src="images/{if $goods.is_tiejia}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_tiejia', {$goods.goods_id})" /></td>
+    <td align="center"><span onclick="listTable.edit(this, 'edit_sort_order', {$goods.goods_id})">{$goods.sort_order}</span></td>
+    
+    <td align="center">
+        {if $goods.supplier_status eq '-1'}
+            审核未通过
+        {else}
+            <img src="images/{if $goods.supplier_status eq '1'}yes{elseif $goods.supplier_status eq '0'}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_status', {$goods.goods_id})" />
+        {/if}
+    </td>
+    <td align="right"><span onclick="listTable.edit(this, 'edit_goods_number', {$goods.goods_id})">{$goods.goods_number}</span></td>
+    <td align="center">
+      <a href="index.php?act=shop&op=shop_edit&goods_id={$goods.goods_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a>
+      <a href="javascript:;" onclick="listTable.remove({$goods.goods_id}, '{$lang.trash_goods_confirm}','shop_remove')" title="{$lang.trash}"><img src="images/icon_trash.gif" width="16" height="16" border="0" /></a>
+    </td>
+  </tr>
+  {foreachelse}
+  <tr><td class="no-records" colspan="17">{$lang.no_records}</td></tr>
+  {/foreach}
+</table>
+<!-- end goods list -->
+
+<!-- 分页 -->
+<table id="page-table" cellspacing="0">
+  <tr>
+    <td align="right" nowrap="true">
+    {include file="page.htm"}
+    </td>
+  </tr>
+</table>
+{if $full_page}
+</div>
+
+<div>
+   操作：
+  <input type="hidden" name="act" value="shop" />
+  <input type="hidden" name="op" value="shop_batch" />
+  <select name="type" id="selAction" onchange="changeAction()">
+    <option value="">{$lang.select_please}</option>
+    <option value="trash">{$lang.trash}</option>
+    <option value="on_sale">{$lang.on_sale}</option>
+    <option value="not_on_sale">{$lang.not_on_sale}</option>
+    <option value="best">{$lang.best}</option>
+    <option value="not_best">{$lang.not_best}</option>
+    <option value="new">{$lang.new}</option>
+    <option value="not_new">{$lang.not_new}</option>
+    <option value="hot">{$lang.hot}</option>
+    <option value="not_hot">{$lang.not_hot}</option>
+  </select>
+  <input type="submit" value="{$lang.button_submit}" id="btnSubmit" name="btnSubmit" class="button"/>
+</div>
+</form>
+
+<script type="text/javascript">
+  listTable.recordCount = {$record_count};
+  listTable.pageCount = {$page_count};
+  listTable.act = "shop";
+  listTable.query = "shop_query";
+  {foreach from=$filter item=item key=key}
+    listTable.filter.{$key} = '{$item}';
+  {/foreach}
+
+  {literal}
+
+
+  
+  /**
+   * @param: bool ext 其他条件：用于转移分类
+   */
+  function confirmSubmit(frm, ext)
+  {
+      if (frm.elements['type'].value == 'trash')
+      {
+          return confirm('您确实要把选中的商品放入回收站吗？');
+      }
+      else if (frm.elements['type'].value == 'not_on_sale')
+      {
+          return confirm('您确实要将选定的商品下架吗？');
+      }
+      else if (frm.elements['type'].value == '')
+      {
+          return false;
+      }
+      else
+      {
+          return true;
+      }
+  }
+
+  function changeAction(){	
+      var frm = document.forms['listForm'];
+      if (!document.getElementById('btnSubmit').disabled && confirmSubmit(frm))
+      {
+          frm.submit();
+      }
+  }
+{/literal}
+</script>
+{include file="pagefooter.htm"}
+{/if}

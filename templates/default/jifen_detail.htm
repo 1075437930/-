@@ -1,0 +1,155 @@
+<!-- $Id: account_list.htm 14928 2008-10-06 09:25:48Z testyang $ -->
+
+{if $full_page}
+
+{include file="pageheader.htm"}
+
+{insert_scripts files="js/utils.js,js/listtable.js"}
+
+
+
+<div class="form-div">
+
+    <form method="post" action="index.php?act=supintegral&op=jifen_detail&id={$supplier_id}" name="searchForm">
+
+        <select name="change_type" onchange="document.forms['searchForm'].submit()">
+
+            <option value="" {if $change_type eq ''}selected="selected"{/if}>所有积分变动</option>
+
+            <option value="1" {if $change_type eq '1'}selected="selected"{/if}>增加积分变动</option>
+
+            <option value="2" {if $change_type eq '2'}selected="selected"{/if}>扣除积分变动</option>
+
+        </select>
+
+        <strong>店铺名称: </strong>{$supp_info.supplier_name}
+
+        <strong>商家实际积分: </strong>{$supp_info.jifen}
+
+        <strong>商家违规扣除积分: </strong>{$jianshao}
+
+        <strong>商家获得的积分: </strong>{$zengjia}
+
+
+    </form>
+
+</div>
+
+
+
+<form method="post" action="" name="listForm">
+
+    <div class="list-div" id="listDiv">
+
+        {/if}
+
+
+
+        <table cellpadding="3" cellspacing="1">
+
+            <tr>
+
+                <th width="20%">积分变动时间</th>
+
+                <th width="60%">积分变动原因</th>
+
+                <th>积分变动分值</th>
+
+                <th>积分变动类型</th>
+
+
+
+            </tr>
+
+            {foreach from=$jifen_list item=jifen}
+
+            <tr align="center">
+
+                <td >{$jifen.change_time}</td>
+
+                <td>{$jifen.reason}</td>
+
+                <td>{$jifen.count}</td>
+
+                <td>
+
+                    {if $jifen.type eq 0}
+
+                    <span style="color:#FF4747">扣除</span>
+
+                    {else}
+
+                    <span>增加</span>
+
+                    {/if}
+
+                </td>
+
+            </tr>
+
+            {foreachelse}
+
+            <tr><td class="no-records" colspan="6">{$lang.no_records}</td></tr>
+
+            {/foreach}
+
+        </table>
+
+        <table id="page-table" cellspacing="0">
+
+            <tr>
+
+                <td align="right" nowrap="true">
+
+                    {include file="page.htm"}
+
+                </td>
+
+            </tr>
+
+        </table>
+        {if $full_page}
+
+    </div>
+
+</form>
+
+
+
+<script type="text/javascript" language="javascript">
+    listTable.recordCount = {$record_count};
+    listTable.pageCount = {$page_count};
+    listTable.act = 'supintegral';
+    listTable.query = 'query';
+
+    {foreach from = $filter item = item key = key}
+
+    listTable.filter.{$key}
+    = '{$item}';
+
+    {/foreach}
+
+
+
+    {
+        literal
+    }
+
+    onload = function ()
+
+    {
+
+        // 开始检查订单
+
+        startCheckOrder();
+
+    }
+
+    {/literal}
+
+
+</script>
+
+{include file="pagefooter.htm"}
+
+{/if}

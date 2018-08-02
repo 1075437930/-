@@ -1,0 +1,52 @@
+<!-- $Id: user_rank.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{if $full_page}
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<form method="post" action="" name="listForm">
+<!-- start ads list -->
+<div class="list-div" id="listDiv">
+{/if}
+
+<table cellspacing='1' id="list-table">
+  <tr>
+    <th>典藏产品标签</th>
+	<th>对应产品个数</th>
+    <th>{$lang.handler}</th>
+  </tr>
+  {foreach from=$dctags_list item=dctags} 
+  <tr>
+    <td class="first-cell" ><span onclick="listTable.edit(this,'edit_tags_name', {$dctags.tags_id})">{$dctags.tags_name}</span></td>
+     <td class="first-cell" ><span>{$dctags.goodnums}</span></td>
+	 <!--代码增加--cb--68ecshop-->
+    <td align="center">	 <a href="index.php?act=dctags&op=edit&dctags_id={$dctags.tags_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" border="0" height="16" width="16" />编辑</a>
+    <a href="javascript:;" onclick="listTable.remove({$dctags.tags_id}, '{$lang.drop_confirm}','remove')" title="{$lang.remove}"><img src="images/icon_drop.gif" border="0" height="16" width="16">删除</a></td>
+  </tr>
+   {foreachelse}
+    <tr><td class="no-records" colspan="4">暂无内容,请添加典藏标签</td></tr>
+  {/foreach}
+	<tr>
+	<td align="right" nowrap="true" colspan="4">{include file="page.htm"}</td>
+	</tr>
+  </table>
+{if $full_page}
+</div>
+<!-- end user ranks list -->
+</form>
+<script type="Text/Javascript" language="JavaScript">
+  listTable.recordCount = {$record_count};
+  listTable.pageCount = {$page_count};
+  listTable.query = "lists_query";
+  listTable.act = "dctags";
+  {foreach from=$filter item=item key=key}
+  listTable.filter.{$key} = '{$item}';
+  {/foreach}
+  {literal}
+  onload = function()
+  {
+    startCheckOrder();
+  }
+  {/literal}
+</script>
+{include file="pagefooter.htm"}
+{/if}

@@ -1,0 +1,223 @@
+<span style='color:#FF0000'>注：拒绝申请和删除申请时，已付款的申请需要先退还申请费用再操作（余额支付的会自行退还到余额中）</span>
+<br/>
+<table width="100%" cellspacing="1" cellpadding="2" id="list-table">
+
+  <tr>
+
+    <th width="6%">编号</th>
+
+    <th width="6%">店铺ID</th>
+
+    <th width="6%">店铺名称</th>
+    <th width="6%">申请功能</th>
+    <th width="10%">申请时间</th>
+
+    <th width="6%">申请期限</th>
+    <th width="8%">开始时间</th>
+    <th width="8%">到期时间</th>
+
+    <th width="6%">所需费用</th>
+
+	<!-- <th width="15%">申请备注</th> -->
+
+	<th width="10%">支付方式</th>
+  <th width="6%">交易单号</th>
+
+    <th width="6%">审核状态</th>
+    <th>操作</th>
+
+  </tr>
+
+  {foreach from=$apply_list item=apply}
+
+  <tr align="center" class="{$apply.id}" id="{$apply.id}">
+
+    <td align="center" class="first-cell" >
+
+      <span>
+
+		{$apply.id}
+
+      </span>
+
+    </td>
+
+    <td align="center" class="first-cell" >
+
+      <span>
+
+		{$apply.supplier_id}
+
+      </span>
+
+    </td>
+
+    <td align="center" class="first-cell" >
+
+      {$apply.supplier_name}
+
+    </td>
+
+    <td align="center" class="first-cell" >
+
+      {$apply.module}
+
+    </td>
+
+    <td align="center" class="first-cell" >
+
+      {$apply.apply_time}
+
+    </td>
+
+    <td align="center" class="first-cell" >
+
+      <span>
+
+		{$apply.over_time}/月
+
+      </span>
+
+    </td>
+    <td align="center" class="first-cell" >
+
+      <span>
+
+    {$apply.open_start_time}
+
+      </span>
+
+    </td>
+
+    <td align="center" class="first-cell" >
+
+      <span>
+
+		{$apply.open_end_time}
+
+      </span>
+
+    </td>
+
+    <td align="center" class="first-cell" >
+
+      <span>
+
+		{$apply.apply_money} 元
+
+      </span>
+
+    </td>
+
+	<!-- <td align="center" class="first-cell" >
+
+      <span>
+
+		{$apply.note}
+
+      </span>
+
+    </td> -->
+
+	<td align="center" class="first-cell" >
+
+      <span>
+
+		{$apply.pay_type}
+
+      </span>
+    {if $apply.pay_status eq 1}
+        <span>[{$apply.pay_status_name}]</span>
+    {else}
+	   <span style="color:red;">[{$apply.pay_status_name}]</span>
+    {/if}
+
+    </td>
+    <td align="center" class="first-cell" >
+
+      <span>
+        {$apply.pay_sn}
+      </span>
+
+    </td>
+
+    <td align="center" class="first-cell" >
+
+      <span>
+		    {$apply.apply_status_name}
+      </span>
+
+    </td>
+
+    <td width="24%" align="center">
+
+      {if $apply.apply_status eq 1}  <!--通过-->
+        
+        <a href="index.php?act=suppaymodule&op=close&id={$apply.id}" onclick="return confirm('确定要关闭该功能吗？')" title="关闭">关闭</a> 
+
+      {elseif $apply.apply_status eq 2}  <!--未通过-->
+      
+        <a href="index.php?act=suppaymodule&op=pass&id={$apply.id}" onclick="return confirm('确定要通过审核吗？')" title="通过">通过</a>  |
+      
+         <a href="index.php?act=suppaymodule&op=remove&id={$apply.id}"  onclick="return confirm('已付款的申请,请确保已退还申请费用!\n删除后无法恢复,确定要删除吗？')" title="删除">删除</a>
+
+      {else}  <!--待审核-->
+        <a href="index.php?act=suppaymodule&op=refuse&id={$apply.id}" onclick="return confirm('已付款的申请,请确保已退还申请费用!\n确定要拒绝通过吗？')" title="拒绝">拒绝</a> |
+        <a href="index.php?act=suppaymodule&op=pass&id={$apply.id}" onclick="return confirm('确定要通过审核吗？')" title="通过">通过</a> |
+         <a href="index.php?act=suppaymodule&op=remove&id={$apply.id}" onclick="return confirm('已付款的请确保已退还申请费用!\n删除后无法恢复,确定要删除吗？')" title="删除">删除</a>
+      {/if}
+
+    </td>
+
+  </tr>
+
+  {/foreach}
+
+</table>
+
+<!-- 分页 -->
+
+<table id="page-table" cellspacing="0">
+
+  <tr>
+
+    <td align="right" nowrap="true">
+
+      {include file="page.htm"}
+
+    </td>
+
+  </tr>
+
+</table>
+
+<script>
+
+  listTable.recordCount = {$record_count};
+
+  listTable.pageCount = {$page_count};
+  
+  listTable.act = "suppaymodule";
+
+  listTable.query = "query";
+
+  {foreach from=$filter item=item key=key}
+
+  {if $key neq "shop_name"}
+
+      listTable.filter.{$key} = '{$item}';
+
+  {/if}
+
+  {/foreach}
+
+  onload = function()
+
+  {
+
+    listTable.query = "query";
+
+  }
+
+</script>
+

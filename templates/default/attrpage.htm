@@ -1,0 +1,109 @@
+1111111
+      <script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+
+      <div id="turn-page">
+
+        {$lang.total_records} <span id="totalRecords">{$record_count}</span>
+
+        {$lang.total_pages} <span id="totalPages">{$page_count}</span>
+
+        {$lang.page_current} <span id="pageCurrent">{$pagenum}</span>
+
+        {$lang.page_size} <input type='text' size='3' id='pageSize' value="{$length}" onkeypress="return listTable.changePageSize(event)" />
+        
+        <span id="page-link">
+          {literal}<a href="javascript:" class="first">{/literal}{$lang.page_first}</a>
+          {literal}<a href="javascript:" class="prev">{/literal}{$lang.page_prev}</a>
+          {literal}<a href="javascript:" class="next">{/literal}{$lang.page_next}</a>
+          {literal}<a href="javascript:" class="last">{/literal}{$lang.page_last}</a>
+         跳转到 <input id="pageInput" title="按回车键跳转到指定页数" value="{$pagenum}" style="width:25px;"  onkeypress="if(event.keyCode==13) {listTable.gotoPage(this.value);}"   type="text">
+          <input class="button" id="pagerBtn" value="GO"  type="button">
+        </span>
+      </div>
+      <script>
+          $(function(){
+              /*上一页*/
+              var page_prev=parseInt($('#pageCurrent').html())-1;
+              $('.prev').click(function(){
+
+                  if(page_prev<1){
+                      page_prev=1;
+                  }
+                  chuan(page_prev);
+              });
+
+              /*下一页*/
+
+              $('.next').click(function(){
+                  var page_next=parseInt($('#pageCurrent').html())+1;
+
+                  var page_count=parseInt($('#totalPages').html());
+
+                  if(page_next>page_count){
+                      page_next=page_count;
+                  }
+                  chuan(page_next);
+              });
+
+              /*第一页*/
+              $('.first').click(function(){
+                  chuan(1);
+              });
+
+              /*最后一页*/
+              $('.last').click(function(){
+
+                  var page_count=parseInt($('#totalPages').html());
+                  chuan(page_count);
+              });
+
+              /*去指定的页*/
+              $('#pagerBtn').click(function(){
+                    var val =$('#pageInput').val();
+                  var page_count=parseInt($('#totalPages').html());
+                  if(val>page_count){
+                      val=page_count;
+                  }
+                      chuan(val);
+              });
+
+
+
+              function chuan(page){
+                  var length=$('#pageSize').val();
+
+                  $('#totalPages').html(Math.ceil(parseInt("{$record_count}")/length));
+                  $('#pageCurrent').html(page);
+                  $.ajax({
+                        //分页相关url
+                      url:"index.php?act=attribute&op=attr_list",
+                      data:{"pagenum":page,"length":length,'request':1},
+                      method:"get",
+                      success:function(rev){
+                          $('.item').remove();
+                          /*将json字符串转换为json对象*/
+                          var json_obj=JSON.parse(rev);
+
+                          for(var i = 0;i<json_obj.length;i++){
+                              //分页相关 替代{if}
+                              var enabled=json_obj[i].enabled;
+                              if(enabled==1){
+                                  var panduan="<img src='{$urls_dir}/images/yes.gif'>"
+                              }
+                              //分页相关  html
+                              $('#trr').before("<tr class='item'><td>"+json_obj[i].attr_id+"</td><td></td><td>"+json_obj[i].attr_name+"</td><td>"+json_obj[i].type_name+"</td>"+json_obj[i].fs+"<td>"+json_obj[i].attr_values+"</td><td>"+json_obj[i].sort_order+"</td><a href='index.php?act=attribute&op=attr_list&goods_type="+json_obj[i].fs+"'>属性列表</a><a href='index.php?act=goods_type&op=goods_type_edit&goods_type="+json_obj[i].cat_id+"'>编辑</a><a href='index.php?act=goods_type&op=goods_type_del&goods_type="+json_obj[i].cat_id+"'>移除</a></td></tr>");
+
+                          }
+                      }
+                  });
+              }
+          })
+
+
+
+
+
+
+
+
+      </script>

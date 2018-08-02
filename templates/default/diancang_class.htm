@@ -1,0 +1,58 @@
+<!-- $Id: user_rank.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{if $full_page}
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<form method="post" action="" name="listForm">
+<!-- start ads list -->
+<div class="list-div" id="listDiv">
+{/if}
+
+<table cellspacing='1' id="list-table">
+  <tr>
+    <th>典藏分类</th>	
+	<th>对应产品个数</th>
+	<th>分类图片</th>
+	<th>分类描述</th>
+    <th>是否显示</th>
+	<th>是否热门</th>
+	<th>是否推荐</th>
+    <th>{$lang.handler}</th>
+  </tr>
+  {foreach from=$dc_class item=dcclass} 
+  <tr>
+     <td class="first-cell" ><span onclick="listTable.edit(this,'edit_class_name', {$dcclass.dcclass_id})">{$dcclass.class_name}</span></td>
+     <td class="first-cell" ><span>{$dcclass.goodnums}</span></td>
+	 <td class="first-cell" ><img src="{$dcclass.imgurl}" /></td>
+	 <td class="first-cell" >{$dcclass.content}</td>
+	 <td align="center"><img src="images/{if $dcclass.dc_show}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_dclass_show', {$dcclass.dcclass_id})" /></td>
+	 <td align="center"><img src="images/{if $dcclass.class_hot}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_class_hot', {$dcclass.dcclass_id})" /></td>
+	 <td align="center"><img src="images/{if $dcclass.class_best}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_class_best', {$dcclass.dcclass_id})" /></td>
+	 <!--代码增加--cb--68ecshop-->
+    <td align="center">	 <a href="index.php?act=dcclass&op=edit&dcclass_id={$dcclass.dcclass_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" border="0" height="16" width="16" />编辑</a>
+    <a href="javascript:;" onclick="listTable.remove({$dcclass.dcclass_id}, '{$lang.drop_confirm}','remove')" title="{$lang.remove}"><img src="images/icon_drop.gif" border="0" height="16" width="16">删除</a></td>
+  </tr>
+   {foreachelse}
+    <tr><td class="no-records" colspan="8">暂无内容,请添加典藏分类</td></tr>
+  {/foreach}	
+  <tr>		
+  <td align="right" nowrap="true" colspan="8">{include file="page.htm"}</td>	  
+  </tr>
+  </table>
+{if $full_page}
+</div>
+<!-- end user ranks list -->
+</form>
+<script type="Text/Javascript" language="JavaScript">  
+listTable.recordCount = {$record_count};  
+listTable.pageCount = {$page_count};
+listTable.act = "dcclass";   
+listTable.query = "lists_query";  
+{foreach from=$filter item=item key=key}  
+listTable.filter.{$key} = '{$item}';  
+{/foreach}  
+{literal}  
+{/literal}
+</script>
+{include file="pagefooter.htm"}
+{/if}

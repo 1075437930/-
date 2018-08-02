@@ -1,0 +1,128 @@
+<!-- $Id: auction_info.htm  16992 2010-01-19 08:45:49Z wangleisvn $ -->
+
+{if $full_page}
+{include file="pageheader.htm"}
+<script type="text/javascript" src="js/calendar.php?lang={$cfg_lang}"></script>
+
+{insert_scripts files="js/validator.js,js/transport.org.js,js/utils.js,js/listtable.js}
+
+<div class="list-div">
+    <div class="important">
+        <ul class="import">
+            <li class="import_1">
+                <div class="module">
+                    <i></i>
+                    <div class="detail">
+                        <strong style="color:#FA841E; text-decoration:none">{$pointnum.zong_send}/个</strong>
+                        <span style="font-size: 12px">已发放投资卷</span>
+                    </div>
+                </div>
+            </li>
+            <li class="import_2">
+                <div class="module">
+                    <i></i>
+                    <div class="detail">
+                        <strong style="color:#FA841E; text-decoration:none">{$pointnum.zong_make}/个</strong>
+                        <span style="font-size: 12px">已使用投资卷</span>
+                    </div>
+                </div>
+            </li>
+            <li class="import_3">
+                <div class="module">
+                    <i></i>
+                    <div class="detail">
+                        <strong style="color:#FA841E; text-decoration:none">{$pointnum.zong_sendpic}/元</strong>
+                        <span style="font-size: 12px">总发放卷金额</span>
+                    </div>
+                </div>
+            </li>
+            <li class="import_4">
+                <div class="module">
+                    <i></i>
+                    <div class="detail">
+                        <strong style="color:#FA841E; text-decoration:none">{$pointnum.zong_makepic}/元</strong>
+                        <span style="font-size: 12px">总使用卷金额</span>
+                    </div>
+                </div>
+            </li>
+            <li class="import_5">
+                <div class="module">
+                    <i></i>
+                    <div class="detail">
+                        <strong style="color:#FA841E; text-decoration:none">{$pointnum.zong_pic}/元</strong>
+                        <span style="font-size: 12px">总带来资金</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<br />
+
+
+
+<!-- start admin_logs list -->
+<div class="list-div" id="listDiv">
+    {/if}
+    <table cellpadding="3" cellspacing="1">
+        <tr>
+            <th>编号</th>
+            <th>名称</th>
+            <th>描述</th>
+            <th>金额</th>
+            <th>过期天数</th>
+            <th>发放个数</th>
+            <th>已用个数</th>
+            <th>点卷类型</th>
+            <th>使用范围</th>
+            <th>发放类型</th>
+            <th>是否开启</th>
+            <th>{$lang.handler}</th>
+        </tr>
+        {foreach from=$pointlist item=poeitm}
+        <tr width="100%">
+            <td width="3%" align="center"><span>{$poeitm.point_id}</span></td>
+            <td width="15%" ><span>{$poeitm.point_name}</span></td>
+            <td width="25%" ><span>{$poeitm.point_brief}</span></td>
+            <td width="5%" align="center"><span>{$poeitm.point_pic}</span></td>
+            <td width="5%" align="center"><span>{$poeitm.valid_time}</span></td>
+            <td width="5%" align="center"><span>{$poeitm.send}</span></td>
+            <td width="5%" align="center"><span>{$poeitm.make}</span></td>
+            <td width="5%" align="center"><span>{$poeitm.type_name}</span></td>
+            <td width="5%" align="center"><span>{$poeitm.scope_name}</span></td>
+            <td width="5%" align="center"><span>{$poeitm.send_name}</span></td>
+            <td width="10%" align="center"><img src="images/{if $poeitm.start}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_start', {$poeitm.point_id})" /></td>
+            <td align="center" width="10%">
+                <span>
+                    <a href="index.php?act=vouchers&op=edit_point&pointid={$poeitm.point_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" border="0" height="16" width="16" />编辑</a>
+                    {if $poeitm.send_start == 1}	
+                    <a href="index.php?act=vouchers&op=sent_point&pointid={$poeitm.point_id}" title="发放"><img src="images/icon_copy.gif" width="16" height="16" border="0" />发放</a>
+                    {/if}
+                </span>
+            </td>
+        </tr>
+        {foreachelse}
+        <tr><td class="no-records" colspan="11">暂无内容,请添加投资卷</td></tr>
+        {/foreach}
+        <tr>
+            <td align="right" nowrap="true" colspan="11">{include file="page.htm"}</td>
+        </tr>
+    </table>
+
+    {if $full_page}
+</div>
+
+<script language="JavaScript">
+    listTable.recordCount = {$record_count};
+    listTable.pageCount = {$page_count};
+    listTable.query = "query";
+    listTable.act = "vouchers";
+    {foreach from = $filter item = item key = key}
+    listTable.filter.{$key} = '{$item}';
+    {/foreach}
+
+</script>
+
+{include file="pagefooter.htm"}
+
+{/if}

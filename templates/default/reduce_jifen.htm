@@ -1,0 +1,62 @@
+<!-- $Id: brand_info.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+<div class="main-div">
+<form method="post" action="index.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+<table cellspacing="1" cellpadding="3" width="100%">
+  <tr>
+    <td class="label">处罚原因</td>
+    <td>
+		<!-- <input type="text" name="punish_reason" maxlength="60" value="{$punish.reason}" /> -->
+		<select name="punish_reason" id="punish_reason" onchange="reduce()">
+			<option value="0">请选择处罚积分的原因</option>
+			{foreach from=$punish_reason_list item=reason}
+				<option value="{$reason.id}">{$reason.reason}</option>
+			{/foreach}
+		 </select>
+	</td>
+  </tr>
+  <tr>
+    <td class="label">处罚积分</td>
+    <td><input type="text" name="punish_count" id = "punish_count" maxlength="40" size="15" value="" readonly="readonly"/></td>
+  </tr>
+  
+  <tr>
+    <td colspan="2" align="center"><br />
+      <input type="submit" class="button" value="确定" />
+      <input type="reset" class="button" value="重置" />
+      <input type="hidden" name="act" value="{$form_action}" />
+      <input type="hidden" name="op" value="{$form_op}" />
+      <input type="hidden" name="id" value="{$supplier_id}" />
+    </td>
+  </tr>
+</table>
+</form>
+</div>
+{insert_scripts files="js/utils.js,js/validator.js"}
+{literal}
+<script language="JavaScript">
+	function reduce(){
+		var punish_reason = document.getElementById("punish_reason").value;
+		if(punish_reason>0){
+			var callback = function(res)
+			{
+			  if (res.error == 0)
+			  {
+				document.getElementById("punish_count").value=res.content;
+			  }
+			}
+			Ajax.call('index.php?is_ajax=1&act=supintegral&op=huoqu_jifen', "jifen_id=" + punish_reason, callback, "GET", "JSON");
+		}else{
+			document.getElementById("punish_count").value='';
+		}
+	}
+	function validate(){
+		var punish_reason = document.getElementById("punish_reason").value;
+		if(punish_reason == 0){
+			alert('请选择处罚原因');
+			return false;
+		}
+	}
+</script>
+{/literal}
+{include file="pagefooter.htm"}

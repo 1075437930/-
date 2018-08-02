@@ -1,0 +1,53 @@
+{if $full_page}
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<!-- start admin_logs list -->
+<h1>
+    <span class="action-span"><a href="index.php?act=app_seting&op=add_login_img">{$lang.add_img}</a></span>
+
+</h1>
+<div class="list-div" id="listDiv">
+    {/if}
+    <table cellpadding="3" cellspacing="1">
+        <tr>
+            <th><span><a href="javascript:listTable.sort('id', 'DESC'); " title="">{$lang.bianhao}</a></span></th>
+            <th>{$lang.background_img}</th>
+            <th>{$lang.action}</th>
+        </tr>
+        {foreach from=$img_list item=list}
+        <tr width="100%" id="tr_{$list.id}">
+            <td width="30%" align="center"><span>{$list.id}</span></td>
+            <td width="50%" align="center" class="first-cell"><img src="{$list.imgurl}" alt=""></td>
+            <td width="20%" align="center">
+                <a href="index.php?act=app_seting&op=remove_login_img&id={$list.id}" title="移除">
+                    <img src="images/icon_drop.gif" border="0" height="16" width="16" />
+                </a>
+            </td>
+        </tr>
+        {foreachelse}
+        <tr><td class="no-records" colspan="10">{$lang.no_img}</td></tr>
+        {/foreach}
+        <tr>
+            <td align="right" nowrap="true" colspan="6">{include file="page.htm"}</td>
+        </tr>
+    </table>
+
+    {if $full_page}
+</div>
+<!-- end ad_position list -->
+
+<script type="text/javascript" language="JavaScript">
+    listTable.recordCount = {$record_count};
+    listTable.pageCount = {$page_count};
+    listTable.act = "app_seting";
+    listTable.query = "login_img_query";
+    {foreach from=$filter item=item key=key}
+    listTable.filter.{$key} = '{$item}';
+    {/foreach}
+    {literal}
+
+</script>
+{/literal}
+{include file="pagefooter.htm"}
+{/if}

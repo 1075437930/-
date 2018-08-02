@@ -1,0 +1,52 @@
+<!-- $Id: tag_edit.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/validator.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/transport.org.js"></script>
+<div class="main-div">
+<form method="post" action="index.php" name="theForm" onSubmit="return validate()">
+<table cellspacing="1" cellpadding="3" width="100%">
+  <tr>
+    <td class="label">分类名称</td>
+    <td><input name="class_name" type="text" id="class_name" value="{$classinto.class_name}" maxlength="60" /><span class="require-field">*</span>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">分类注释</td>
+    <td><textarea rows="10" cols="30" name="class_cent" id="class_cent" maxlength="200" placeholder="请添加标签注释">{$classinto.class_cent}</textarea><span class="require-field">*</span>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <input type="submit" class="button" value="{$lang.button_submit}" />
+      <input type="reset" class="button" value="{$lang.button_reset}" />
+      <input type="hidden" name="act" value="askset" />
+      <input type="hidden" name="op" value="{$form_op}" />
+      <input type="hidden" name="id" value="{$classinto.class_id}" />
+  </tr>
+</table>
+</form>
+</div>
+
+{literal}
+<script language="JavaScript">
+<!--
+onload = function()
+{
+    // 开始检查订单
+    startCheckOrder();
+}
+/**
+ * 检查表单输入的数据
+ */
+function validate()
+{
+    validator = new Validator("theForm");
+    validator.required('class_name', '分类名称不能为空');
+
+    return validator.passed();
+}
+
+//-->
+</script>
+{/literal}
+{include file="pagefooter.htm"}

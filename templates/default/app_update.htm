@@ -1,0 +1,83 @@
+
+{include file="pageheader.htm"}
+<div class="main-div">
+    <form method="post" id="form_met" action="index.php?act=app_seting&op=app_update" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+        <table cellspacing="1" cellpadding="3" width="100%">
+            <input type="hidden" name="goods_type" value="1"/>
+            <tr>
+                <td class="label">{$lang.app_version}:</td>
+                <td><input type="text" id="attr_name" name="app_version" maxlength="60" value="{$res.version}" />{$lang.require_field}</td>
+            </tr>
+            <tr>
+                <td class="label">{$lang.version_description}</td>
+                <td>
+                    <textarea rows="5" cols="80" name="version_description" id="version_description">{$res.version_description}</textarea>
+                    {$lang.require_field}
+                </td>
+            </tr>
+            <tr>
+                <td class="label">{$lang.ios_url}</td>
+                <td>
+                    <input type="text" name="ios_url"  maxlength="100" value="{$res.ios_url}" id="ios_url"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">{$lang.is_update}</td>
+                <td>
+                    {if $res.is_update eq 0}
+                    <input type="radio" name="is_update"  maxlength="60" value="0" checked />否
+                        {else}
+                    <input type="radio" name="is_update"  maxlength="60" value="0"  />否
+                    {/if}
+
+                    {if $res.is_update eq 1}
+                    <input type="radio" name="is_update"  maxlength="60" value="1" checked />是
+                    {else}
+                    <input type="radio" name="is_update"  maxlength="60" value="1"  />是
+                    {/if}
+                    {$lang.require_field}<br>如果不更新 用户登录app无提示，如果有每次登录都会提示
+                </td>
+
+
+            </tr>
+
+            <tr>
+                <td colspan="2" align="center"><br />
+                    <input type="submit" class="button" value="{$lang.quding}" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+{insert_scripts files="js/utils.js,js/validator.js"}
+
+{include file="pagefooter.htm"}
+
+<script>
+    var inp_name=document.getElementById('attr_name');
+    var inp_name1=document.getElementById('version_description');
+    var inp_name2=document.getElementById('ios_url');
+
+    var form= document.getElementById('form_met');
+
+    form.onsubmit=function(){
+        if(!inp_name.value){
+            alert('版本号不能为空');
+            return false
+        }
+
+        if(!inp_name1.value){
+            alert('版本说明不能为空');
+            return false
+        }
+
+        if(!inp_name2.value){
+            alert('ios更新地址不能为空');
+            return false
+        }
+
+    }
+
+
+</script>
+

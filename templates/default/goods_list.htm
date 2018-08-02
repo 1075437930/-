@@ -1,0 +1,161 @@
+<!-- $Id: goods_list.htm 17126 2010-04-23 10:30:26Z liuhui $ -->
+
+{if $full_page}
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+
+<!-- 商品搜索 -->
+{include file="goods_search.htm"}
+<!-- 商品列表 -->
+<form method="post" action="index.php" name="listForm" onsubmit="return confirmSubmit(this)">
+  <!-- start goods list -->
+  <div class="list-div" id="listDiv">
+{/if}
+<table cellpadding="3" cellspacing="1">
+  <tr>
+    <th>
+      <input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox" />
+      <a href="javascript:listTable.sort('goods_id'); ">{$lang.record_id}</a>{$sort_goods_id}
+    </th>
+    <th>图片</th>
+    <th>{$lang.goods_name}</th>
+    <th>{$lang.goods_sn}</th>
+    <th><a href="javascript:listTable.sort('shop_price'); ">商城价格</a>{$sort_shop_price}</th>
+    <th><a href="javascript:listTable.sort('add_time'); ">上架时间</a>{$sort_add_time}</th><!--手机专享价格   app  jx-->
+    <th><a href="javascript:listTable.sort('last_update'); ">修改时间</a>{$sort_last_update}</th><!--手机专享价格   app  jx-->
+    <th><a href="javascript:listTable.sort('is_on_sale'); ">{$lang.is_on_sale}</a>{$sort_is_on_sale}</th>
+    <th><a href="javascript:listTable.sort('is_best'); ">{$lang.is_best}</a>{$sort_is_best}</th>
+    <th><a href="javascript:listTable.sort('is_new'); ">{$lang.is_new}</a>{$sort_is_new}</th>
+    <th><a href="javascript:listTable.sort('is_hot'); ">{$lang.is_hot}</a>{$sort_is_hot}</th>
+    <th><a href="javascript:listTable.sort('is_tiejia'); ">{$lang.is_tiejia}</a>{$sort_is_tiejia}</th>
+    <th><a href="javascript:listTable.sort('sort_order'); ">{$lang.sort_order}</a>{$sort_sort_order}</th>
+    <th><a href="javascript:listTable.sort('goods_number'); ">{$lang.goods_number}</a>{$sort_goods_number}</th>
+    <th>{$lang.handler}</th>
+  <tr>
+  {foreach from=$goods_list item=goods}
+  <tr>
+    <td><input type="checkbox" name="checkboxes[]" value="{$goods.goods_id}" />{$goods.goods_id}</td>
+    <td><img src="{$goods.goods_thumb}" width="40" height="40" border="0" /></td>
+    <td class="first-cell" style="{if $goods.is_promote}color:red;{/if}"><span>{$goods.goods_name}</span></td>
+    <td><span onclick="listTable.edit(this, 'edit_goods_sn', {$goods.goods_id})">{$goods.goods_sn}</span></td>
+    <td align="right"><span>{$goods.shop_price}</span></td>
+    <td align="right"><span>{$goods.add_time}</span></td>
+    <td align="right"><span>{$goods.last_update}</span></td>
+    <td align="center"><img src="images/{if $goods.is_on_sale}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_on_sale', {$goods.goods_id})" /></td>
+    <td align="center"><img src="images/{if $goods.is_best}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_best', {$goods.goods_id})" /></td>
+    <td align="center"><img src="images/{if $goods.is_new}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_new', {$goods.goods_id})" /></td>
+    <td align="center"><img src="images/{if $goods.is_hot}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_hot', {$goods.goods_id})" /></td>
+    <td align="center"><img src="images/{if $goods.is_tiejia}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_tiejia', {$goods.goods_id})" /></td>
+    <td align="center"><span onclick="listTable.edit(this, 'edit_sort_order', {$goods.goods_id})">{$goods.sort_order}</span></td>
+    <td align="right"><span onclick="listTable.edit(this, 'edit_goods_number', {$goods.goods_id})">{$goods.goods_number}</span></td>
+    <td align="center">
+      <a href="index.php?act=goods&op=goods_edit&goods_id={$goods.goods_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a>
+      <a href="javascript:;" class="huishou" data-id="{$goods.goods_id}"  title="{$lang.trash}"><img src="images/icon_trash.gif" width="16" height="16" border="0" /></a>
+    </td>
+  </tr>
+  {foreachelse}
+  <tr><td class="no-records" colspan="15">{$lang.no_records}</td></tr>
+  {/foreach}
+</table>
+<!-- end goods list -->
+
+<!-- 分页 -->
+<table id="page-table" cellspacing="0">
+  <tr>
+    <td align="right" nowrap="true">
+    {include file="page.htm"}
+    </td>
+  </tr>
+</table>
+
+{if $full_page}
+</div>
+
+<div>
+   操作：
+  <input type="hidden" name="act" value="goods" />
+  <input type="hidden" name="op" value="goods_batch" />
+  <select name="type" id="selAction" onchange="changeAction()">
+    <option value="">{$lang.select_please}</option>
+    <option value="trash">{$lang.trash}</option>
+    <option value="on_sale">{$lang.on_sale}</option>
+    <option value="not_on_sale">{$lang.not_on_sale}</option>
+    <option value="best">{$lang.best}</option>
+    <option value="not_best">{$lang.not_best}</option>
+    <option value="new">{$lang.new}</option>
+    <option value="not_new">{$lang.not_new}</option>
+    <option value="hot">{$lang.hot}</option>
+    <option value="not_hot">{$lang.not_hot}</option>
+  </select>
+  <input type="submit" value="{$lang.button_submit}" id="btnSubmit" name="btnSubmit" class="button"/>
+</div>
+</form>
+
+<script type="text/javascript">
+  listTable.recordCount = {$record_count};
+  listTable.pageCount = {$page_count};
+  listTable.act = "goods";
+  listTable.query = "goods_query";
+  {foreach from=$filter item=item key=key}
+    listTable.filter.{$key} = '{$item}';
+  {/foreach}
+
+  {literal}
+
+
+  
+  /**
+   * @param: bool ext 其他条件：用于转移分类
+   */
+  function confirmSubmit(frm, ext)
+  {
+      if (frm.elements['type'].value == 'trash')
+      {
+          return confirm('您确实要把选中的商品放入回收站吗？');
+      }
+      else if (frm.elements['type'].value == 'not_on_sale')
+      {
+          return confirm('您确实要将选定的商品下架吗？');
+      }
+      else if (frm.elements['type'].value == '')
+      {
+          return false;
+      }
+      else
+      {
+          return true;
+      }
+  }
+
+  function changeAction(){	
+      var frm = document.forms['listForm'];
+      if (!document.getElementById('btnSubmit').disabled && confirmSubmit(frm))
+      {
+          frm.submit();
+      }
+  }
+{/literal}
+</script>
+{include file="pagefooter.htm"}
+{/if}
+
+<!--修改的部分start by陈洋-->
+<script>
+    $('.huishou').click(function(){
+        var id=$(this).attr('data-id');
+        if(confirm('确定要将商品放入回收站吗1?')){
+            $.ajax({
+                url:"index.php?act=goods&op=trash_remove",
+                type:"get",
+                data:{"id":id},
+                success:function(rev){
+                    if(rev=='yes'){
+                        location.href="index.php?act=goods&op=lists";
+                    }
+                }
+            })
+        }
+    })
+</script>
+<!--修改的部分end by陈洋-->

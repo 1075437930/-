@@ -1,0 +1,105 @@
+<!-- $Id: diancang_list.htm 2017/9/12 星期二 zhangxiaolong $ -->
+
+{if $full_page}
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+
+<!-- 典藏搜索 -->
+<div class="form-div">
+  <form action="javascript:search_imgs_position()" name="searchForm">
+    关键字<input type="text" name="keyword" size="30" placeholder="典藏名称 典藏描述 商品货号"/>
+    <input type="submit" value="{$lang.button_search}" class="button" />
+  </form>
+</div>
+<script language="JavaScript">
+    function search_imgs_position()
+    {
+        listTable.filter['keyword'] = Utils.trim(document.forms['searchForm'].elements['keyword'].value);
+        listTable.filter['page'] = 1;
+        listTable.loadList();
+    }
+
+</script>
+<!-- 典藏列表 -->
+
+  <!-- start goods list -->
+  <div class="list-div" id="listDiv">
+{/if}
+<table cellpadding="3" cellspacing="1">
+  <tr>
+    <th>
+      <a href="javascript:listTable.sort('capitalid'); ">{$lang.record_id}</a>{$sort_capitalid}
+    </th>
+    <th>典藏名称</th>
+	<th>图片</th>
+	<th>编号</th>
+	<th>分类</th>
+	<th><a href="javascript:listTable.sort('add_time'); ">添加时间</a>{$sort_add_time}</th>
+	<th><a href="javascript:listTable.sort('dc_update'); ">修改时间</a>{$sort_dc_update}</th>
+	<th>典藏价格</th>
+	<th>典藏详情</th>
+	<th>是否用卷</th>
+	<th>是否显示</th>
+	<th>精品</th>
+	<th>新品</th>
+    <th>热销推荐</th>
+    <th>推荐排序</th>
+	<th>标签设置</th>
+    <th>{$lang.handler}</th>
+  <tr>
+  {foreach from=$diancang_list item=diancang}
+  <tr>
+    <td>{$diancang.capitalid}</td>
+    <td class="first-cell">{$diancang.dc_names|escape:html}</td>
+	<td><img src="{$diancang.imgurls}" width="30" height="30" border="0" /></td>
+    <td align="center">{$diancang.goods_sn}</td>
+	<td align="center">{$diancang.class_name}</td>
+    <td align="center">{$diancang.add_time}</td>
+	<td align="center">{$diancang.dc_update}</td>
+	<td align="center">{$diancang.dc_price}</td>
+	<td align="center">{$diancang.xiang}</td>
+	<td align="center"><img src="images/{if $diancang.juan_type}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_juan_type', {$diancang.capitalid})" /></td>
+    <td align="center"><img src="images/{if $diancang.dc_show}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_dc_show', {$diancang.capitalid})" /></td>
+    <td align="center"><img src="images/{if $diancang.dc_best}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_dc_best', {$diancang.capitalid})" /></td>
+    <td align="center"><img src="images/{if $diancang.dc_new}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_dc_new', {$diancang.capitalid})" /></td>
+    <td align="center"><img src="images/{if $diancang.dc_hot}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_dc_hot', {$diancang.capitalid})" /></td>
+    <td align="center"><span onclick="listTable.edit(this, 'edit_sort_goods', {$diancang.capitalid})">{$diancang.sort_goods}</span></td>
+	<td align="center"><a href="index.php?act=diancang&op=set_dctags&capitalid={$diancang.capitalid}" title="标签设置">标签（{$diancang.goodtagnum}）</a></td>
+    <td align="center">
+      <a href="index.php?act=diancang&op=dcedit&capitalid={$diancang.capitalid}" title="{$lang.edit}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a>
+      <a href="javascript:;" onclick="listTable.remove({$diancang.capitalid}, '{$lang.drop_confirm}','dcremove')" title="{$lang.remove}"><img src="images/icon_drop.gif" border="0" height="16" width="16" /></a>
+    </td>
+  </tr>
+  {foreachelse}
+  <tr><td class="no-records" colspan="14">暂无典藏产品快去添加吧</td></tr>
+  {/foreach}
+</table>
+<!-- end goods list -->
+
+<!-- 分页 -->
+<table id="page-table" cellspacing="0">
+  <tr>
+    <td align="right" nowrap="true">
+    {include file="page.htm"}
+    </td>
+  </tr>
+</table>
+
+{if $full_page}
+</div>
+
+<script type="text/javascript">
+  listTable.recordCount = {$record_count};
+  listTable.pageCount = {$page_count};
+  listTable.act = "diancang";
+  listTable.query = "dcquery";
+  {foreach from=$filter item=item key=key}
+  listTable.filter.{$key} = '{$item}';
+  {/foreach}
+  {literal}
+
+{/literal}
+</script>
+{include file="pagefooter.htm"}
+{/if}

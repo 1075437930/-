@@ -1,0 +1,119 @@
+<!-- $Id: tag_edit.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="js/validator.js,js/transport.org.js}
+<div class="main-div">
+<form method="post" action="index.php" name="theForm" >
+<table cellspacing="1" cellpadding="3" width="100%">
+  <tr>
+	  <td class="label">对应代金卷名称</td>
+	  <td><input name="point_id" type="text" id="point_id" value="{$pointinto.point_name}" disabled="disabled" ></td>
+  </tr>
+  <tr>
+  <tr>
+    <td class="label">选着发送类型</td>
+    <td>
+        <label><input type="radio" name="sent_types" onclick="handleone();" value="1" />单人发送</label>
+	 <label><input type="radio" name="sent_types" onclick="handlerank();" value="2" />用户级别</label>
+    </td>
+  </tr>
+	<tr style="display:none" id="userone">
+		<td align="right">搜索会员名称(所搜用户必须进入过典藏页面，如果没有是所搜不到）</td>
+		<td><input name="keyword" type="text" id="keyword" placeholder="请用昵称或电话所搜">			
+		  <input name="search" type="button" id="search" value="搜索" class="button" onclick="searchUser()" />
+		  <select name="dcuser_id" id="dcuser_id" >
+		  <option value="0" selected="selected">先搜索用户</option>
+		  </select>
+		  </td>		
+	  </tr>
+	<tr style="display:none" id="ranks" >
+	  <td class="label">选着典藏级别</td>
+	  <td><select name="dcrank" id="dcrank">
+		<option value="1" selected>全部用户</option>
+                <option value="2" selected>普通用户</option>
+                <option value="3" selected>vip会员用户</option>
+	  </select></td>
+	</tr>
+  <tr>
+    <td colspan="2" align="center">
+      <input type="submit" class="button" value="{$lang.button_submit}" />
+      <input type="reset" class="button" value="{$lang.button_reset}" />
+      <input type="hidden" name="pointid" value="{$pointinto.point_id}" />
+	  <input type="hidden" name="valid_time" value="{$pointinto.valid_time}" />
+      <input type="hidden" name="act" value="vouchers" />
+      <input type="hidden" name="op" value={$form_op} />
+	</td>
+  </tr>
+</table>
+</form>
+</div>
+
+{literal}
+<script language="JavaScript">
+<!--
+
+
+
+function searchUser()
+{
+  var filter = new Object;
+  filter.keyword  = document.forms['theForm'].elements['keyword'].value;
+ 
+  Ajax.call('index.php?is_ajax=1&act=vouchers&op=search_user&keyword='+filter.keyword, '', searchUserResponse, 'POST', 'JSON');
+}
+
+function searchUserResponse(result)
+{
+  
+  if (result.error == '1' && result.message != '')
+  {
+    alert(result.message);
+    return;
+  }
+
+  var frm = document.forms['theForm'];
+  var sel = frm.elements['dcuser_id'];
+  if (result.error == 0)
+  {
+    /* 清除 options */
+    sel.length = 0;
+    /* 创建 options */
+    var userinto = result.content.userinto;
+    if (userinto)
+    {
+      for (i = 0; i < userinto.length; i++)
+      {
+          var opt = document.createElement("OPTION");
+          opt.value = userinto[i].capital_userid;
+          opt.text  = userinto[i].alias;
+          sel.options.add(opt);
+      }
+    }
+    else
+    {
+      var opt = document.createElement("OPTION");
+      opt.value = 0;
+      opt.text  = '此用户未进入典藏。不能送卷';
+      sel.options.add(opt);
+    }
+  }
+  return;
+}
+
+  function handlerank()
+  {
+	  document.getElementById('ranks').style.display = "table-row";	
+	  document.getElementById('userone').style.display = "none";	
+  }
+
+   function handleone()
+  {
+     document.getElementById('ranks').style.display = "none";	
+	 document.getElementById('userone').style.display = "table-row";
+  }
+
+
+
+//-->
+</script>
+{/literal}
+{include file="pagefooter.htm"}

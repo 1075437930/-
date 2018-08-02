@@ -1,0 +1,121 @@
+<!-- $Id: auction_info.htm  16992 2010-01-19 08:45:49Z wangleisvn $ -->
+{include file="pageheader.htm"}
+<script type="text/javascript" src="js/calendar.php?lang={$cfg_lang}"></script>
+<link href="js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+{insert_scripts files="js/validator.js,js/transport.org.js,js/utils.js,js/region.js}
+<div class="main-div">
+<form method="post" action="index.php" name="theForm" enctype="multipart/form-data" onSubmit="return validate()">
+<table cellspacing="1" cellpadding="3" width="100%">
+  <tr>
+    <td class="label">{$lang.store_name}</td>
+    <td>
+	 <input name="offline_name" type="text" id="offline_name" value="{$offline.offline_name}" maxlength="60" /><span class="require-field">*</span>
+	</td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.store_phone}</td>
+    <td><input name="offline_tel" type="text" id="offline_tel" value="{$offline.offline_tel}" maxlength="60" /></td><span class="require-field">*</span>
+  </tr>
+  <tr>
+	  <td class="label">{$lang.store_address}</td>
+	  <td>
+
+			<select name="country" id="selCountries" onchange="region.changed(this, 1, 'selProvinces')">
+
+			<option value="0">请选择</option>
+
+			{foreach from=$country_list item=country}
+
+			<option value="{$country.region_id}" {if $offline.country eq $country.region_id}selected{/if}>{$country.region_name}</option>
+
+			{/foreach}
+
+		  </select>
+
+		  <select name="province" id="selProvinces" onchange="region.changed(this, 2, 'selCities')">
+
+			<option value="0">请选择</option>
+
+			{foreach from=$province_list item=province}
+
+			<option value="{$province.region_id}" {if $offline.province eq $province.region_id}selected{/if}>{$province.region_name}</option>
+
+			{/foreach}
+
+		  </select>
+
+		  <select name="city" id="selCities" onchange="region.changed(this, 3, 'selDistricts')">
+
+			<option value="0">请选择</option>
+
+			{foreach from=$city_list item=city}
+
+			<option value="{$city.region_id}" {if $offline.city eq $city.region_id}selected{/if}>{$city.region_name}</option>
+
+			{/foreach}
+
+		  </select>
+
+		  <select name="district" id="selDistricts" >
+
+			<option value="0">请选择</option>
+
+			{foreach from=$district_list item=district}
+
+			<option value="{$district.region_id}" {if $offline.district eq $district.region_id}selected{/if}>{$district.region_name}</option>
+
+			{/foreach}
+
+		  </select>
+
+    </td>
+  </tr>
+  <tr>
+  <tr>
+    <td align="right">酒店详细地址</td>
+    <td><textarea  name="address" cols="60" rows="4" id="address">{$offline.address}</textarea></td><span class="require-field">*</span>
+  </tr>
+  <tr>
+    <td class="label">酒店详细描述</td>
+    <td><textarea rows="10" cols="30" name="offline_desc" id="offline_desc" maxlength="200" placeholder="酒店详细描述">{$offline.offline_desc}</textarea>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">酒店展示样式</td>
+    <td><input name="style_id" type="text" id="style_id" value="{$offline.style_id}" maxlength="60" /><span class="require-field">预留功能字段（不用管）</span> </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <input type="submit" class="button" value="{$lang.button_submit}" />
+	  <input type="reset" class="button" value="{$lang.button_reset}" />
+	  <input type="hidden" name="act" value="{$form_act}" />
+          <input type="hidden" name="op" value="{$form_op}" />
+      <input type="hidden" name="offline_id" value="{$offline.offline_id}" />
+	</td>
+  </tr>
+</table>
+</form>
+</div>
+
+{literal}
+<script language="JavaScript">
+<!--
+var goodsstyle = 0;
+/**
+ * 检查表单输入的数据
+ */
+function validate()
+{
+    validator = new Validator("theForm");
+    validator.required('offline_name', '酒店名称不能为空');
+    validator.required('offline_tel', '酒店电话不能为空');
+	validator.required('address', '酒店详细地址不能为空');
+	
+    return validator.passed();
+}
+
+
+//-->
+</script>
+{/literal}
+{include file="pagefooter.htm"}

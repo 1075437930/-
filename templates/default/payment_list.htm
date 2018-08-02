@@ -1,0 +1,71 @@
+<!-- $Id: payment_list.htm 15541 2009-01-08 10:29:01Z testyang $ -->
+
+{include file="pageheader.htm"}
+
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<!-- start payment list -->
+
+<div class="list-div" id="listDiv">
+
+<table cellspacing='1' cellpadding='3'>
+
+  <tr>
+
+    <th>{$lang.payment_name}</th>
+
+    <th width="40%">{$lang.payment_desc}</th>
+
+    <th>{$lang.short_pay_fee}</th>
+
+    <th>{$lang.sort_order}</th>
+
+    <th>{$lang.handler}</th>
+
+  </tr>
+
+  {foreach from=$pay_list item=pay}
+  <tr>
+
+    <td class="first-cell" valign="top">{$pay.pay_name}</td>
+    <td>{$pay.pay_desc|nl2br}</td>
+    <td valign="top" align="right">
+      <span>{$pay.pay_fee}</span>
+    </td>
+    <td align="right" valign="top"> <span >{$pay.pay_order}</span> </td>
+    <td align="center" valign="top">      
+      <a href="index.php?act=payment&op=edit&code={$pay.pay_code}">{$lang.edit}</a>
+      <a href="javascript:confirm_redirect(lang_removeconfirm, 'index.php?act=payment&op=remove&code={$pay.pay_code}')">{$lang.remove}</a>
+    </td>
+  </tr>
+  {/foreach}
+
+</table>
+
+</div>
+
+<!-- end payment list -->
+
+<script type="Text/Javascript" language="JavaScript">
+
+<!--
+
+{literal}
+
+onload = function()
+
+{
+
+  // 开始检查订单
+
+  startCheckOrder();
+
+}
+
+{/literal}
+
+//-->
+
+</script>
+
+{include file="pagefooter.htm"}

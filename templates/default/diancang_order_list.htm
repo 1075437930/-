@@ -1,0 +1,163 @@
+
+{if $full_page}
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<!-- 订单搜索订单状态。0，未确认；1，已确认；2，已取消；3，无效；4完成、 -->
+<div class="form-div">
+  <form action="javascript:searchOrderzhang()" name="searchForm">
+    <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+    订单号：<input name="order_sn" type="text" id="order_sn" size="15">
+    收货人：<input name="consignee" type="text" id="consignee" size="15">
+	订单操作状态：
+    <select name="order_status" id="order_status">
+      <option value="-1">请选择</option>
+      <option value="0">未确认</option>
+	  <option value="1">已确认</option>
+	  <option value="2">已取消</option>
+	  <option value="3">无效</option>
+	  <option value="4">退货</option>
+	  <option value="5">完成</option>
+    </select>
+	订单发货状态：
+	<select name="shipping_status" id="shipping_status">
+      <option value="-1">请选择</option>
+      <option value="0">未发货</option>
+	  <option value="1">已发货</option>
+	  <option value="2">已收货</option>
+    </select>
+	订单支付状态：
+	<select name="pay_status" id="pay_status">
+      <option value="-1">请选择</option>
+      <option value="0">未付款</option>
+	  <option value="1">已付款</option>
+	  <option value="2">付款中</option>
+    </select>
+    <input type="submit" value="{$lang.button_search}" class="button" />
+	<a href="index.php?act=dcorder&op=lists&tian7=1&daoqi=0&nots_tui=0">7天内到期({$timesd.tian_nums})</a>
+    <a href="index.php?act=dcorder&op=lists&daoqi=2&tian7=0&nots_tui=0">到期未退({$timesd.tui_nums})</a>
+    <a href="index.php?act=dcorder&op=lists&nots_tui=3&tian7=0&daoqi=0">过期不退({$timesd.not_nums})</a>
+  </form>
+</div>
+<script language="JavaScript">
+
+</script>
+
+<!-- 订单列表 -->
+<form method="post" action="index.php?act=dcorder&op=operate" name="listForm" >
+  <div class="list-div" id="listDiv">
+{/if}
+
+<table cellpadding="3" cellspacing="1">
+  <tr>
+    <th>订单号</th>
+	<th>商品图片</th>
+    <th><a href="javascript:listTable.sort('add_time', 'DESC'); ">下单时间</a>{$sort_add_time}</th>
+    <th>收货人</th>
+    <th>商品总金额</th>
+	<th>应付金额</th>
+	<th>投资时间</th>
+	<th>收益比例</th>
+	<th>收益金额</th>
+	<th>优惠金额</th>
+	<th>优惠途径</th>
+    <th>订单状态</th>
+	<th>付款渠道</th>
+	<th><a href="javascript:listTable.sort('end_time', 'DESC'); ">结束时间</a>{$sort_end_time}</th>
+	<th>发放代金卷</th>
+    <th>操作</th>
+  <tr>
+  {if $dcorder_list}
+  {foreach from=$dcorder_list item=order}
+  <tr class="
+  	{if $order.can_remove}tr_canceled{/if} 
+    {if $order.pay_status eq 0 and $order.order_status neq 2}tr_nopay{/if} 
+    {if $order.shipping_status eq 2}tr_receipt{/if}
+    {if $order.order_status neq 2 and $order.pay_status eq 2 and $order.shipping_status eq 0}tr_nosend{/if}
+    {if $order.tuihuan}tr_back{/if}">
+    <td valign="top" nowrap="nowrap">{$order.order_sn}</td>
+    <td valign="top" nowrap="nowrap" align="center">
+	<img src="{$order.imgurls}" width="30" height="30" border="0"  />
+	<br />{$order.goods_sn}</td>
+	<td align="left" valign="top">{$order.tian_time}</td>
+    <td align="left" valign="top">{$order.consignee}{if $order.tel} [TEL: {$order.tel}]{else}无{/if} <br />{$order.address}</td>
+    <td align="right" valign="top" nowrap="nowrap">{$order.goods_amount}</td>
+	<td align="right" valign="top" nowrap="nowrap">{$order.order_amount}</td>
+	<td align="right" valign="top" nowrap="nowrap">{$order.yue_fen}/月</td>
+    <td align="right" valign="top" nowrap="nowrap">{$order.goods_bili}%</td>
+	<td align="right" valign="top" nowrap="nowrap">{$order.gyongjing_pic}</td>
+	<td align="right" valign="top" nowrap="nowrap">{$order.goods_youpic}</td>
+	<td align="center" valign="top" nowrap="nowrap">{$order.youpic_name}</td>
+	<td align="center" valign="top" nowrap="nowrap">{$lang.os[$order.order_status]},{$lang.ps[$order.pay_status]},{$lang.ss[$order.shipping_status]}</td>
+	 
+	<td align="center" valign="top" nowrap="nowrap">{$order.pay_name}</td>
+	<td align="center" valign="top" nowrap="nowrap">{$order.jie_time}</td>
+	 {if $order.send_point == 1}
+		<td align="center" valign="top" nowrap="nowrap">已发放</td>
+	 {else}
+		<td align="center" valign="top" nowrap="nowrap">
+                        <a href="index.php?act=dcorder&op=dcorder_send_point&dcorder_id={$order.capital_orderid}&user_id={$order.user_id}" title="点击发放代金卷">点击发放</a>
+                </td>
+	 {/if}
+    <td align="center" valign="top"  nowrap="nowrap">
+     <a href="index.php?act=dcorder&op=info&dcorder_id={$order.capital_orderid}">{$lang.detail}</a>
+     {if $order.can_remove}
+     <br /><a href="javascript:;" onclick="listTable.remove({$order.capital_orderid}, remove_confirm, 'remove')">{$lang.remove}</a>
+     {/if}
+     {if $order.look_goods}
+     <br /><span style="color:#F00">看货订单</span>
+     {else}
+      <br /><span style="">典藏订单</span>
+     {/if}
+     {if $order.tuihuan }
+     <br /><span style="color:#F00">{$order.tuihuan.back_type},{$order.tuihuan.status_back}</span>
+     {/if}
+    </td>
+  </tr>
+ {/foreach}
+  {else}
+	<tr><td class="no-records" colspan="14">暂无订单内容</td></tr>
+  {/if}
+</table>
+
+<!-- 分页 -->
+<table id="page-table" cellspacing="0">
+  <tr>
+    <td align="right" nowrap="true">
+    {include file="page.htm"}
+    </td>
+  </tr>
+</table>
+
+{if $full_page}
+  </div>
+</form>
+<script language="JavaScript">
+listTable.recordCount = {$record_count};
+listTable.pageCount = {$page_count};
+listTable.act = "dcorder";
+listTable.query = "lists_query";
+{foreach from=$filter item=item key=key}
+listTable.filter.{$key} = '{$item}';
+{/foreach}
+{literal}
+	
+	/**
+	 * 搜索订单
+	 */
+	function searchOrderzhang()
+	{
+		listTable.filter['order_sn'] = Utils.trim(document.forms['searchForm'].elements['order_sn'].value);
+		listTable.filter['consignee'] = Utils.trim(document.forms['searchForm'].elements['consignee'].value);
+		listTable.filter['order_status'] = document.forms['searchForm'].elements['order_status'].value;
+		listTable.filter['shipping_status'] = document.forms['searchForm'].elements['shipping_status'].value;
+		listTable.filter['pay_status'] = document.forms['searchForm'].elements['pay_status'].value;
+		listTable.loadList();
+	}
+ {/literal}
+</script>
+
+
+{include file="pagefooter.htm"}
+{/if}
+

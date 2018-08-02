@@ -1,0 +1,173 @@
+<!-- $Id -->
+
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,../js/transport.org.js,validator.js"}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/transport.org.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/validator.js"></script>
+{if $step eq "consignee"}
+<script type="text/javascript" src="{$urls_dir}/js/region.js"></script>
+{/if}
+
+{if $step eq "consignee"}
+<script type="text/javascript" src="{$urls_dir}/js/transport.org.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/region.js"></script>
+<script type="text/javascript">
+region.isAdmin=false;
+</script>
+<form name="theForm" action="index.php?act=dcorder&op=update&step={$step}&dcorder_id={$dcorder_id}&step_act={$step_act}" method="post" onsubmit="return checkConsignee()">
+<div class="list-div">
+<table cellpadding="3" cellspacing="1">
+  {if $address_list}
+  <tr>
+    <th align="left">{$lang.address_list}</th>
+    <td><select onchange="loadAddress(this.value)"><option value="0" selected>{$lang.select_please}</option>
+      {foreach from=$address_list item=address}<option value="{$address.address_id}" {if $smarty.get.address_id eq $address.address_id}selected{/if}>{$address.consignee|escape} {$address.address|escape} {$address.tel|escape}</option>{/foreach}
+    </select></td>
+  </tr>
+  {/if}
+  <tr>
+    <th width="150" align="left">{$lang.label_consignee}</th>
+    <td><input name="consignee" type="text" value="{$dcorder.consignee}" />
+      {$lang.require_field}</td>
+  </tr>
+  <tr>
+    <th align="left">{$lang.label_area}</th>
+    <td><select name="country" id="selCountries" onChange="region.changed(this, 1, 'selProvinces')">
+        <option value="0" selected="true">{$lang.select_please}</option>
+        {foreach from=$country_list item=country}
+        <option value="{$country.region_id}" {if $dcorder.country eq $country.region_id}selected{/if}>{$country.region_name}</option>
+        {/foreach}
+      </select> 
+	  <select name="province" id="selProvinces" onChange="region.changed(this, 2, 'selCities')">
+		  <option value="0">{$lang.select_please}</option>
+		  {foreach from=$province_list item=province}
+		  <option value="{$province.region_id}" {if $dcorder.province eq $province.region_id}selected{/if}>{$province.region_name}</option>
+		  {/foreach}
+      </select> 
+	  <select name="city" id="selCities" onchange="region.changed(this, 3, 'selDistricts')">
+		  <option value="0">{$lang.select_please}</option>
+		  {foreach from=$city_list item=city} 
+		  <option value="{$city.region_id}" {if $dcorder.city eq $city.region_id}selected{/if}>{$city.region_name}</option>
+		   {/foreach} 
+	  </select>
+	  <select name="district" id="selDistricts">
+		  <option value="0">{$lang.select_please}</option>
+		  {foreach from=$district_list item=district}
+		  <option value="{$district.region_id}" {if $dcorder.district eq $district.region_id}selected{/if}>{$district.region_name}</option>
+		  {/foreach} 
+	  </select>
+        {$lang.require_field}</td>
+  </tr>
+  <tr>
+    <th align="left">{$lang.label_address}</th>
+    <td><input name="address" type="text" value="{$dcorder.address}" size="40" />
+    {$lang.require_field}</td>
+  </tr>
+  
+  <tr>
+    <th align="left">{$lang.label_tel}</th>
+    <td><input name="tel" type="text" value="{$dcorder.tel1}" />
+    </td>
+  </tr>
+</table>
+</div>
+
+<div align="center">
+  <p>
+    <input name="{if $step_act eq 'add'}next{else}finish{/if}" type="submit" class="button" value="{if $step_act eq 'add'}{$lang.button_next}{else}{$lang.button_submit}{/if}" />
+    <input type="button" value="{$lang.button_cancel}" class="button" onclick="history.back()" />
+  </p>
+</div>
+</form>
+{elseif $step eq "invoice_no"}
+<!--增值税发票_删除_START_www.taoyumall.com-->
+<form name="theForm" action="diancang_order.php?act=step_post&step={$step}&dcorder_id={$dcorder_id}&step_act={$step_act}" method="post">
+<div class="list-div">
+	<table cellpadding="3" cellspacing="1">
+	  <tr>
+		<td colspan="3"><strong>{$lang.shipping_note}</strong></td>
+	  </tr>
+	  <tr>
+		<td colspan="3"><a href="javascript:showNotice('noticeinvoiceno');" title="{$lang.form_notice}"><img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a><strong>{$lang.label_invoice_no}</strong><input name="invoice_no" type="text" value="{$dcorder.invoice_no}" size="30"/><br/><span class="notice-span" id="noticeinvoiceno" style="display:block;">{$lang.invoice_no_mall}</span></td>
+	  </tr>
+	</table>
+</div>
+  <p align="center">
+    <input name="{if $step_act eq 'add'}next{else}finish{/if}" type="submit" class="button" value="{if $step_act eq 'add'}{$lang.button_next}{else}{$lang.button_submit}{/if}" />
+    <input type="button" value="{$lang.button_cancel}" class="button" onclick="history.back()" />
+  </p>
+</form>
+{/if}
+<script language="JavaScript">
+  var step = '{$step}';
+  var orderId = {$dcorder_id};
+  var act = '{$smarty.get.act}';
+{literal}
+ 
+  function checkConsignee()
+  {
+    var eles = document.forms['theForm'].elements;
+
+    if (eles['country'].value <= 0)
+    {
+      alert(pls_select_area);
+      return false;
+    }
+    if (eles['province'].options.length > 1 && eles['province'].value <= 0)
+    {
+      alert(pls_select_area);
+      return false;
+    }
+    if (eles['city'].options.length > 1 && eles['city'].value <= 0)
+    {
+      alert(pls_select_area);
+      return false;
+    }
+    if (eles['district'].options.length > 1 && eles['district'].value <= 0)
+    {
+      alert(pls_select_area);
+      return false;
+    }
+	if (eles['tel'].value=="") {
+		alert("手机号和电话至少填一项！");
+		return false;
+	} else {
+		var msg="";
+		if ((eles['tel'].value!="") && !checkPhone(eles['tel'].value)) {
+			msg+="电话号格式不正确！";
+		}
+		if(msg!=""){
+			alert(msg);
+			return false;
+		}
+		
+	}
+    validator = new Validator("theForm");
+    validator.required("consignee",  "收货人为空！");
+    validator.required("address",  "地址为空！");
+    validator.required("tel",  "电话为空！");
+    return validator.passed();
+  }
+ 
+  function checkPhone( mobile )
+  {
+  	var reg = /^1\d{10}$/; //11位数字，以1开头。
+  	return reg.test( mobile );
+  }
+	/**
+   * 载入收货地址
+   * @param int addressId 收货地址id
+   */
+  function loadAddress(addressId)
+  {
+
+{/literal}
+    location.href = 'index.php?act=dcorder&op=edit&dcorder_id={$smarty.get.dcorder_id}&step={$smarty.get.step}&address_id=' + addressId;
+{literal}
+  }
+  
+</script>
+{/literal}
+
+{include file="pagefooter.htm"} 

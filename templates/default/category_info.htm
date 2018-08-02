@@ -1,0 +1,116 @@
+<!-- $Id: category_info.htm 16752 2009-10-20 09:59:38Z wangleisvn $ -->
+
+{include file="pageheader.htm"} 
+<!-- start add new category form -->
+{insert_scripts files="js/utils.js,js/validator.js"}
+<div class="main-div">
+    <form action="index.php" method="post" name="theForm" enctype="multipart/form-data" onsubmit="return tijao()">
+        <table width="100%" id="general-table">
+            <tr>
+              <td class="label">{$lang.cat_name}:</td>
+              <td><input type='text' name='cat_name' id="cat_name" value='{$cat_info.cat_name}' />
+                <font color="red">*</font> <span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="noticeCat_name">{$lang.notice_cat_name}</span></td>
+            </tr>
+            <tr>
+              <td class="label">目录名称:</td>
+              <td>
+                <input type='text' name='path_name' maxlength="20" value='{$cat_info.path_name|escape:html}' size='27' />
+              </td>
+            </tr>
+      <!-- 上级分类-->
+            <tr>
+                <td class="label">{$lang.parent_id}:</td>
+                <td><select name="parent_id" id="parent_id" onchange="change_image();">
+                <option value="0">{$lang.cat_top}</option>
+                  {$cat_select}
+                </select></td>
+            </tr>
+            <tr id="categroy_img">
+                <td class="label">图片上传:</td>
+                <td>
+                    <input type="file" name="cat_img" id="cat_img"/>
+                    图片地址：<input type="text" value="{$cat_info.cat_img}" name="cat_img_url" id="cat_img_url"/>
+                </td>
+                
+            </tr>
+            <tr>
+                <td class="label">{$lang.sort_order}:</td>
+                <td><input type="text" name='sort_order' {if $cat_info.sort_order}value='{$cat_info.sort_order}'{else} value="50"{/if} size="15" /></td>
+            </tr>
+            <tr>
+                <td class="label">{$lang.is_show}:</td>
+                <td>
+                    <input type="radio" name="is_show" value="1" {if $cat_info.is_show neq 0} checked="true"{/if}/>{$lang.yes}
+                    <input type="radio" name="is_show" value="0" {if $cat_info.is_show eq 0} checked="true"{/if} />{$lang.no} 
+                </td>
+            </tr>
+            <tr>
+                <td class="label">{$lang.show_in_nav}:</td>
+                <td>
+                    <input type="radio" name="show_in_nav" value="1" {if $cat_info.show_in_nav neq 0} checked="true"{/if}/>{$lang.yes}
+                    <input type="radio" name="show_in_nav" value="0" {if $cat_info.show_in_nav eq 0} checked="true"{/if} />{$lang.no} 
+                </td>
+            </tr>
+<!--      <tr>
+        <td class="label">{$lang.show_in_index}:</td>
+        <td>
+            <input type="checkbox" name="cat_recommend[]" value="1" {if $cat_recommend[1] eq 1} checked="true"{/if}/>
+            {$lang.index_best}
+            <input type="checkbox" name="cat_recommend[]" value="2" {if $cat_recommend[2] eq 1} checked="true"{/if} />
+            {$lang.index_new}
+            <input type="checkbox" name="cat_recommend[]" value="3" {if $cat_recommend[3] eq 1} checked="true"{/if} />
+            {$lang.index_hot} 
+        </td>
+      </tr>-->
+      <tr>
+        <td class="label">{$lang.keywords}:</td>
+        <td><input type="text" name="keywords" value='{$cat_info.keywords}' size="50"></td>
+      </tr>
+      <tr>
+        <td class="label">{$lang.cat_desc}:</td>
+        <td><textarea name='cat_desc' rows="6" cols="48">{$cat_info.cat_desc}</textarea></td>
+      </tr>
+    </table>
+    <div class="button-div">
+      <input type="submit" class="button" value="{$lang.button_submit}" />
+      <input type="reset" class="button" value="{$lang.button_reset}" />
+    </div>
+    <input type="hidden" name="act" value="{$form_act}" />
+    <input type="hidden" name="op" value="{$form_op}" />
+    <input type="hidden" name="old_cat_name" value="{$cat_info.cat_name}" />
+    <input type="hidden" name="cat_id" value="{$cat_info.cat_id}" />
+  </form>
+</div>
+
+{literal} 
+<script language="JavaScript">
+
+/**
+ * 检查表单输入的数据
+ */
+function tijao(){
+  var cat_name = document.getElementById('cat_name').value;
+  if(cat_name){
+      return true;
+  }else{
+      alert('分类名称不能为空');
+      return false;
+  }
+}
+
+function change_image(){
+    var options=$("#parent_id option:selected");
+    var value = options.val();
+    if(value==0)
+    {
+        document.getElementById('categroy_img').style.display='none';
+    }
+    else
+    {
+        document.getElementById('categroy_img').style.display='table-row';
+    }
+}
+
+</script> 
+{/literal}
+{include file="pagefooter.htm"}

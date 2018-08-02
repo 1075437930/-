@@ -1,0 +1,136 @@
+
+
+<!-- $Id: msg_list.htm 15616 2009-02-18 05:16:22Z sunxiaodong $ -->
+{if $fullpage}
+{include file="pageheader.htm"}
+{/if}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/transport.org.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/validator.js"></script>
+<form method="POST" action="user_msg.php?act=batch_drop" name="listForm" onsubmit="return confirm_bath()">
+
+    <!-- start article list -->
+
+    <div class="list-div" id="listDiv">
+
+        <table cellpadding="3" cellspacing="1">
+
+            <tr>
+
+                <th>{$lang.yijian_id}</th>
+
+                <th>{$lang.user_name}</th>
+
+                <th>{$lang.yijian_title}</th>
+
+                <th><a href="javascript:listTable.sort('yijian_type'); ">{$lang.yijian_type}</a></th>
+
+                <th>{$lang.yijian_time}</th>
+
+                <th>{$lang.yijian_admin}</th>
+
+                <th>{$lang.user_mags}</th>
+
+                <th>{$lang.caozuo}</th>
+
+            </tr>
+
+            {foreach from =$list_all item=yijian}
+
+            <tr>
+
+                <td>{$yijian.yijian_id}</td>
+
+                <td align="center">
+                    {if $yijian.alias }
+                    {$yijian.alias}
+                    {else}    
+                    {$yijian.user_name}
+                    {/if}
+
+                </td>
+
+                <td align="left">{$yijian.yijian_commot|truncate:40|escape:html}</td>
+
+                <td align="center">{$yijian.typename}</td>
+
+                <td align="center"  nowrap="nowrap">{$yijian.add_time}</td>
+
+                <td align="center">{$yijian.adminname}</td>
+
+                <td align="center">{$yijian.huifucommot}</td>
+
+                <td align="center">
+
+                    {if $yijian.type == 0}
+
+                    <a href="index.php?act=suggestion&op=dispose&id={$yijian.yijian_id}" title="{$lang.chuli}">
+
+                        <img src="images/icon_edit.gif" border="0" height="16" width="16" />
+
+                    </a>
+
+                    <a href="index.php?act=suggestion&op=closed&id={$yijian.yijian_id}"   title="{$lang.guanbi}">
+
+                        <img src="images/book_open.gif" border="0" height="16" width="16">
+
+                    </a>
+
+                    {else}
+
+                    <a href="index.php?act=suggestion&op=remove&id={$yijian.yijian_id}"   title="{$lang.shanchu}">
+
+                        <img src="images/icon_drop.gif" border="0" height="16" width="16">
+
+                    </a>
+
+                    {/if}
+
+                </td>
+
+            </tr>
+
+            {/foreach}
+
+        </table>
+
+        <table id="page-table" cellspacing="0">
+
+            <tr>
+
+                <td><div>
+
+
+
+                        <td align="right" nowrap="true">
+
+                            {include file="page.htm"}
+
+                        </td>
+
+            </tr>
+
+        </table>
+
+
+
+    </div>
+
+    <!-- end article list -->
+
+</form>
+<script type="text/javascript">
+       listTable.recordCount = {$record_count};
+    listTable.pageCount = {$page_count};
+    listTable.query = "query";
+    listTable.act = "suggestion";
+    {foreach from=$filter item=item key=key}
+    listTable.filter.{$key} = '{$item}';
+{/foreach} 
+
+</script>
+
+
+{include file="pagefooter.htm"}
+

@@ -1,0 +1,81 @@
+<!-- $Id: admin_logs.htm 15477 2008-12-22 03:44:50Z sunxiaodong $ -->
+
+{if $full_page}
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<link href="{$urls_dir}/js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+<div class="form-div">
+<table>
+  <tr>
+      <td>
+      <form name="theForm" action="javascript:searchInfo()" >
+		问题或回答中包含关键词<input type="text" name="keyword" id="keyword" class="input_te" />
+		<input type="submit" value="搜索" class="button" />
+      </form>
+      </td>   
+  </tr>
+</table>
+</div>
+
+<!-- start admin_logs list -->
+<div class="list-div" id="listDiv">
+{/if}
+
+<table cellpadding="3" cellspacing="1">
+  <tr>
+    <th>编号</th>
+    <th><a href="javascript:listTable.sort('class_id'); ">分类</a>{$sort_class_id}</th>
+    <th>问题</th>
+    <th>关键词</th>
+    <th>答案</th>
+    <th>{$lang.handler}</th>
+  </tr>
+  {foreach from=$ask_list item=asks}
+  <tr width="100%">
+    <td width="3%" align="center"><span>{$asks.ask_id}</span></td>
+    <td width="5%" align="center" class="first-cell"><a href="index.php?act=askset&op=ask_list&amp;class_id={$asks.class_id}" title="{$asks.class_cent}"><span>{$asks.class_name}</span></a></td>
+    <td width="18%" align="left"><span>{$asks.questions}</span></td>
+    <td width="18%" align="left"><span>{$asks.keyword}</span></td>
+	<td width="32%" align="left" width="200"><span>{$asks.answers}</span></td>
+    <td align="center" width="20%">
+      <span>
+      <a href="index.php?act=askset&op=ask_edit&amp;askid={$asks.ask_id}" title="{$lang.edit}"><img src="{$urls_dir}/images/icon_edit.gif" border="0" height="16" width="16" />编辑问答</a>
+      <a href="javascript:;" onclick="listTable.remove({$asks.ask_id}, '{$lang.drop_confirm}','ask_remove')" title="{$lang.remove}"><img src="{$urls_dir}/images/icon_drop.gif" border="0" height="16" width="16">删除问答</a>
+	  </span>
+    </td>
+  </tr>
+  {foreachelse}
+    <tr><td class="no-records" colspan="10">暂无内容,请添加问答</td></tr>
+  {/foreach}
+  <tr>
+    <td align="right" nowrap="true" colspan="6">{include file="page.htm"}</td>
+  </tr>
+</table>
+
+{if $full_page}
+</div>
+<!-- end ad_position list -->
+
+<script type="text/javascript" language="JavaScript">
+  listTable.recordCount = {$record_count};
+  listTable.pageCount = {$page_count};
+  listTable.query = "ask_list_query";
+  listTable.act = "askset";
+
+  {foreach from=$filter item=item key=key}
+  listTable.filter.{$key} = '{$item}';
+  {/foreach}
+  {literal}
+
+
+
+function searchInfo()
+{
+    listTable.filter['keyword'] = Utils.trim(document.forms['theForm'].elements['keyword'].value);
+	  listTable.filter['page'] = 1;
+    listTable.loadList();
+}
+</script>
+{include file="pagefooter.htm"}
+{/if}

@@ -1,0 +1,57 @@
+<!-- $Id: tag_edit.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="validator.js,../js/transport.org.js}
+<div class="main-div">
+    <form method="post" action="index.php" name="theForm" >
+        <table cellspacing="1" cellpadding="3" width="100%">
+            <tr>
+                <td class="label">用户名：</td>
+                <td><input type="text" value="{$alias}" disabled="disabled" ></td>
+            </tr>
+            <tr>
+                <td class="label">点券列表</td>
+                <td>
+                    <select name="point" id="point" onchange="select_point()">
+                        <option value="0" selected>请选择点券</option>
+                        {foreach from=$point_list item=point}
+                             <option value="{$point.point_id}" data="{$point.point_pic}" >{$point.point_name}</option>
+                        {/foreach}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">金额：</td>
+                <td><input type="text" value="0" disabled="disabled" id="money" ></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="submit" class="button" value="{$lang.button_submit}" />
+                    <input type="reset" class="button" value="{$lang.button_reset}" />
+                    <input type="hidden" name="capital_userid" value="{$capital_userid}" />
+                    <input type="hidden" name="dc_order_id" value="{$dc_order_id}" />
+                     <input type="hidden" name="user_id" value="{$user_id}" />
+                     <input type="hidden" name="act" value="dcorder" />
+                    <input type="hidden" name="op" value="{$insert_or_update}" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+{literal}
+<script language="JavaScript">
+<!--
+    onload = function ()
+    {
+        // 开始检查订单
+        startCheckOrder();
+    }
+    function select_point(){
+        var obj = document.getElementById('point');
+        var money = obj.options[obj.selectedIndex].getAttribute('data');
+        document.getElementById('money').value = money;
+    }
+//-->
+</script>
+{/literal}
+{include file="pagefooter.htm"}

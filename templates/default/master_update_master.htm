@@ -1,0 +1,59 @@
+{include file="pageheader_bd.htm"} {insert_scripts files="../js/utils.js,selectzone_bd.js,colorselector.js"}
+<div class="tab-div">
+    <div id="tabbody-div" >
+        <form enctype="multipart/form-data" action="index.php?act=master&op=update&id={$master_info.id}" method="post" name="theForm">
+
+            <table width="100%"  border="0" style="margin-left: 6%">
+                <tr>
+                    <td class="" width="80px">大师名称:</td>
+                    <td><input type="text" style="width: 200px;margin-left: 5px" name="master_name" maxlength="60" value="{$master_info.name}" /></td>
+                </tr>
+                <tr>
+                    <td class="">大师简介:</td>
+                    <td><textarea  name="master_summary" style="width:700px;height:20px;margin-left: 4px;border-color: #ddd;" >{$master_info.master_summary}</textarea>注：建议60字之内</td>
+                </tr>
+                <tr>
+                    <td class="">大师详细介绍:</td>
+                    <td><textarea name="master_detail" style="width:800px;height:150px;margin-left: 4px;border-color: #ddd;
+">{$master_info.master_detail}</textarea></td>
+                </tr>
+				<tr>
+                    <td class="" width="80px">大师排序:</td>
+                    <td><input type="text" style="width: 200px;margin-left: 5px" name="types_num" maxlength="60" value="{$master_info.types_num}" /></td>
+                </tr>
+                <tr>
+                    <td class="">大师头像:</td>
+                    <td><input type="file" style="margin-left: 2px" name="head_portrait"></td>
+                </tr>
+                <tr>
+                    <td class="">大师分类:</td>
+                    <td>
+                        <select style="width: 200px;margin-left: 2px" name="type">
+                            <option value="">请选择大师所属分类</option>
+                            {foreach from=$master_type item=v}
+                            <option value ="{$v.id}"
+                                    {if $v.id eq $master_info.type_id }
+                                    selected
+                                    {/if}
+                            >{$v.master_type}</option>
+                            {/foreach}
+                            <option value="0">其它</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <table width="100%" id="detail-table" style="margin-left: 6%" >
+                <tr><td>艺术成就:</td></tr>
+                <tr>
+                    <td>{$FCKeditor}</td>
+                </tr>
+            </table>
+            <div class="button-div">
+                <input type="hidden" name="goods_id" value="{$goods.goods_id}" />
+                <input id="goods_info_submit" type="submit" value="{$lang.button_submit}" class="button" />
+                <input id="goods_info_reset" type="reset" value="{$lang.button_reset}" class="button" />
+            </div>
+        </form>
+    </div>
+</div>
+{insert_scripts files="validator.js,tab.js"}

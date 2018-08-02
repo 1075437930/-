@@ -1,0 +1,106 @@
+<!-- $Id: ads_info.htm 14216 2008-03-10 02:27:21Z testyang $-->{include file="pageheader.htm"}
+<script language="JavaScript">
+<!--
+
+// 这里把JS用到的所有语言都赋值到这里
+
+{foreach from=$lang.calendar_lang key=key item=item}
+
+var {$key} = "{$item}";
+
+{/foreach}
+
+//-->
+</script>
+<script type="text/javascript" src="{$urls_dir}/js/calendar/calendar.js"></script>
+<link href="{$urls_dir}/js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+<div class="main-div">
+  <form action="index.php" method="post" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+    <table width="100%" id="general-table">
+      <tr>
+        <td class="label">
+          <img src="images/notice.gif" width="16" height="16" border="0" alt="广告名称">广告名称
+          <span class="require-field">*</span></td>
+        <td>
+          <input type="text" name="ad_name" value="{$dcimginto.ad_name}" size="35" /></td>
+      </tr>
+      <tr>
+        <td class="label">开始时间
+          <span class="require-field">*</span></td>
+        <td>
+          <input name="start_time" type="text" id="start_time" size="22" value='{$dcimginto.start_time}' />
+          <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time', '%Y-%m-%d', false, false, 'selbtn1');" value="{$lang.btn_select}" class="button" /></td>
+      </tr>
+      <tr>
+        <td class="label">结束时间
+          <span class="require-field">*</span></td>
+        <td>
+          <input name="end_time" type="text" id="end_time" size="22" value='{$dcimginto.end_time}' />
+          <input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_time', '%Y-%m-%d', false, false, 'selbtn2');" value="{$lang.btn_select}" class="button" /></td>
+      </tr>
+      <tr>
+        <td class="label">广告连接
+          <td>
+            <input type="text" name="links" value="{$dcimginto.links}" size="35" />
+            <span class="require-field">如果不填写 则app点击不做页面跳转</span></td>
+      </tr>
+      <tr>
+        <td class="label">广告连接名称
+          <td>
+            <input type="text" name="links_name" value="{$dcimginto.links_name}" size="35" /></td></tr>
+      <tr>
+        <td class="label">对应连接参数
+          <td>
+            <input type="text" name="canshu" value="{$dcimginto.canshu}" size="35" />
+            <span class="require-field">如果不填写 则无参数页面传递</span></td>
+      </tr>
+      <tr>
+        <td class="label">广告位置
+          <span class="require-field">*</span></td>
+        <td>
+          <select class="chzn-select" name="siteid">
+            <option value='0'>请选择</option>{foreach from=$site_list item=site key=key} {foreach from=$site item=s}
+            <option value="{$key}">{$s}</option>{/foreach} {/foreach}</select></td>
+      </tr>
+      <tr>
+        <td class="label">广告图
+          <span class="require-field">*</span>
+          <td>
+            <input type='file' name='imgurl' size='35' />{if $dcimginto.imgurl}
+            <a href="{$dcimginto.imgurl2}" target="_blank">
+              <img src="images/yes.gif" border="0" /></a>{else}
+            <img src="images/no.gif" />{/if}
+            <input type="hidden" name="imgurl2" value="{$dcimginto.imgurl}" size="35" /></td></tr>
+      <tr>
+        <td class="label">{$lang.showsd}</td>
+        <td>
+          <input type="radio" name="showsd" value="1" {if $ads.showsd eq 1} checked="true" {/if} />{$lang.is_enabled}
+          <input type="radio" name="showsd" value="0" {if $ads.showsd eq 0} checked="true" {/if} />{$lang.no_enabled}</td></tr>
+      <tr>
+        <td class="label">&nbsp;</td>
+        <td>
+          <input type="submit" value="{$lang.button_submit}" class="button" />
+          <input type="reset" value="{$lang.button_reset}" class="button" />
+          <input type="hidden" name="imgs_id" value="{$dcimginto.imgs_id}" />
+          <input type="hidden" name="act" value="ads" />
+          <input type="hidden" name="op" value="insert" /></td>
+      </tr>
+    </table>
+  </form>
+</div>
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/validator.js"></script>
+<script language="JavaScript">{
+    literal
+  }
+  /**     * 检查表单输入的数据     */
+  function validate() {
+    validator = new Validator("theForm");
+    validator.required("ad_name", '广告名称不能为空');
+    validator.required("start_time", '开始时间不能为空');
+    validator.required("end_time", '结束时间不能为空');
+    /* 代码增加 By  www.taoyumall.com Start */
+    validator.islt('start_time', 'end_time', '结束日期不能小于开始日期');
+    return validator.passed();
+  } //-->    {/literal}
+  </script>{include file="pagefooter.htm"}

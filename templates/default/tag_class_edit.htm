@@ -1,0 +1,47 @@
+
+{include file="pageheader.htm"}
+<div class="main-div">
+    <form method="post" id="form_met" action="index.php?act=tag_manage&op=class_edit" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+        <table cellspacing="1" cellpadding="3" width="100%">
+
+            <input type="hidden" name="goods_type" value="1"/>
+
+            <input type="hidden" name="tag_class_id" value="{$info.tag_class_id}"/>
+            <tr>
+                <td class="label">{$lang.class_name}:</td>
+                <td><input type="text" name="class_name" id="attr_name" maxlength="60" value="{$info.class_name}" />{$lang.require_field}</td>
+            </tr>
+
+            <tr>
+                <td class="label">{$lang.class_zs}</td>
+                <td><textarea  name="class_cent" cols="60" rows="4"  >{$info.class_cent}</textarea></td>
+
+            </tr>
+
+            <tr>
+                <td colspan="2" align="center"><br />
+                    <input type="submit" class="button" value="{$lang.button_submit}" />
+                    <input type="reset" class="button" value="{$lang.button_reset}" />
+
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+{insert_scripts files="js/utils.js,js/validator.js"}
+
+{include file="pagefooter.htm"}
+
+<script>
+    var inp_name=document.getElementById('attr_name');
+
+    var form= document.getElementById('form_met');
+
+    form.onsubmit=function(){
+        if(!inp_name.value){
+            alert('分类名称不能为空');
+            return false
+        }
+    }
+
+</script>

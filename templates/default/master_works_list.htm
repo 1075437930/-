@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>商之翼 管理中心 - 大师分类列表 </title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="{$urls_dir}/styles/general.css" rel="stylesheet" type="text/css"/>
+    <link href="{$urls_dir}/styles/main.css" rel="stylesheet" type="text/css"/>
+    <link href="{$urls_dir}/styles/chosen/chosen.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="{$urls_dir}/js/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="{$urls_dir}/js/transport.js"></script>
+    <script type="text/javascript" src="{$urls_dir}/js/common.js"></script>
+    <script type="text/javascript" src="{$urls_dir}/js/jquery-1.10.1.js"></script>
+</head>
+<body>
+<h1>
+    <span class="action-span"><a href="index.php?act=master&op=add_works&id={$id}">添加大师作品</a></span>
+    <span class="action-span1"><a href="index.php">商之翼 管理中心</a> </span>
+    <span id="search_id" class="action-span1"> - 大师{$name}作品列表 </span>
+    <div style="clear:both"></div>
+</h1>
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/placeholder.js"></script>
+<div class="form-div">
+    <form action="index.php?act=master&op=works_list&id={$id}" method="post">
+        作品名称&nbsp;
+        <span style="position:relative"><input type="text" name="keywords" value="{$keywords}" placeholder="" /></span>
+        <input type="submit" class="button" value=" 搜索 " />
+        <span style="float: right; margin-right: 50px; font: 20px red "><a
+                href="index.php?act=master&op=works_list&id={$id}&pagesize={$pagesize}&newpage={$newpage}&keywords={$keywords}">刷新</a></span>
+    </form>
+
+</div>
+
+    <div class="list-div" id="listDiv">
+        <table cellpadding="3" cellspacing="1">
+            <tr>
+                <th>
+                    <a href="index.php?act=master&op=works_list&sort={$sort}&id={$id}&pagesize={$pagesize}&newpage={$newpage}&keywords={$keywords}">编号</a>
+                    <img src="{$urls_dir}/images/sort_{$sort}.gif"></th>
+                <th>作品图</th>
+                <th>作品名字</th>
+                <th>操作</th>
+                <th>作品状态</th>
+            </tr>
+            {foreach from=$res item=v}
+            <tr align="center" id="tb_{$v.goods_id}">
+                <td>
+                    {$v.goods_id}
+                </td>
+                <td><img width="80" height="80" src="{$v.original_img}" alt=""></td>
+                <td class="first-cell">{$v.goods_name}</td>
+                <td><a onclick="del_work({$v.goods_id})">删除</a></td>
+                <td>
+
+                    <input type="hidden" value="{$v.status}" id="hid_{$v.goods_id}">
+                    {if $v.status eq 1}
+                    <img onclick="changestatus({$v.goods_id})" src="{$urls_dir}/images/ture.png" class="img_{$v.goods_id}" style="width: 20px;height: 20px" alt="">
+                    {else}
+                    <img onclick="changestatus({$v.goods_id})" src="{$urls_dir}/images/false.png" class="img_{$v.goods_id}" style="width: 20px;height: 20px" alt="">
+                    {/if}
+
+                </td>
+            </tr>
+            {/foreach}
+
+        </table>
+    </div>
+<input type="hidden" value="{$id}" id="master_id">
+<form method="post" action="index.php?act=master&op=works_list&id={$id}&keywords={$keywords}">
+   <div style="height: 50px;float: right; line-height: 50px">
+       总计{$len}个记录
+       分为{$totpage}页
+       当前第{$newpage}页，
+       每页 <input type="text" value="{$pagesize}" id="pagesize" name='pagesize' style="width: 30px;height: 25px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+       <a href="index.php?act=master&op=works_list&id={$id}&pagesize={$pagesize}&keywords={$keywords}">第一页</a>&nbsp;&nbsp;&nbsp;
+       <a href="index.php?act=master&op=works_list&newpage={$lowpage}&id={$id}&pagesize={$pagesize}&keywords={$keywords}">上一页</a>&nbsp;&nbsp;&nbsp;
+       <a href="index.php?act=master&op=works_list&newpage={$addpage}&id={$id}&pagesize={$pagesize}&keywords={$keywords}">下一页</a>&nbsp;&nbsp;&nbsp;
+       <a href="index.php?act=master&op=works_list&newpage={$totpage}&id={$id}&pagesize={$pagesize}&keywords={$keywords}">最末页</a>&nbsp;&nbsp;&nbsp;
+       跳转到
+       <input type="text" value="" name="newpage" id="go" style="width: 30px;height: 25px">&nbsp;&nbsp;&nbsp;
+       <input type="submit" value="GO">
+   </div>
+</form>
+</body>
+</html>
+<script>
+    $("#pagesize").keyup(function(){
+        var pagesize = $("#pagesize").val();
+        if(isNaN(pagesize)){
+            $("#pagesize").val("1");
+        }
+    })
+    $("#go").keyup(function(){
+        var go = $("#go").val();
+        if(isNaN(go)){
+            $("#go").val("1");
+        }
+    })
+
+
+    function changestatus(id){
+        var master_id = $("#master_id").val();
+        var status =  $("#hid_"+id).val();
+        if(status == 1 ){
+            $("#hid_"+id).val(0);
+        }else{
+            $("#hid_"+id).val(1);
+        }
+        var newstatus =  $("#hid_"+id).val();
+        $.post("index.php?act=master&op=update_works_status",{id:master_id,goods_id:id,status:newstatus},function(data){
+            if(data.status > 0){
+                if( $("#hid_"+id).val() == 0 ){
+                    $(".img_"+id).attr("src","{$urls_dir}/images/false.png");
+                }else{
+                    $(".img_"+id).attr("src","{$urls_dir}/images/ture.png");
+                }
+            }else{
+                if($("#hid_"+id).val() == 0){
+                    $("#hid_"+id).val(1);
+                }else{
+                    $("#hid_"+id).val(0);
+                }
+            }
+        },"json")
+    }
+    function del_work(id){
+        var master_id = $("#master_id").val();
+        $.post("index.php?act=master&op=work_remove",{id:id,master_id:master_id},function(data){
+            if(data.status == 1) {
+                $("#tb_" + id).remove();
+            }
+        },"json");
+
+    }
+</script>
+

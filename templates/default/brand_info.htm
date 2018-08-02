@@ -1,0 +1,66 @@
+<!-- $Id: brand_info.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+<div class="main-div">
+<form method="post" action="index.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+<table cellspacing="1" cellpadding="3" width="100%">
+  <tr>
+    <td class="label">{$lang.brand_name}</td>
+    <td><input type="text" name="brand_name" id="brand_name" maxlength="60" value="{$brand.brand_name}" />{$lang.require_field}</td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.brand_logo}</td>
+    <td>
+        <input type="file" name="brand_logo" id="brand_logo" size="45">
+        {$lang.brand_logo_url}
+        <input type="text" name="brand_logo_url" size="45" value="{$brand.brand_logo}" />
+    </span>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.brand_desc}</td>
+    <td><textarea  name="brand_desc" cols="60" rows="4"  >{$brand.brand_desc}</textarea></td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.sort_order}</td>
+    <td><input type="text" name="sort_order" maxlength="40" size="15" value="{$brand.sort_order}" /></td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.is_show}</td>
+    <td><input type="radio" name="is_show" value="1" {if $brand.is_show eq 1}checked="checked"{/if} /> {$lang.yes}
+        <input type="radio" name="is_show" value="0" {if $brand.is_show eq 0}checked="checked"{/if} /> {$lang.no}
+        ({$lang.visibility_notes})
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><br />
+      <input type="submit" class="button" value="{$lang.button_submit}" />
+      <input type="reset" class="button" value="{$lang.button_reset}" />
+      <input type="hidden" name="act" value="{$form_act}" />
+      <input type="hidden" name="op" value="{$form_op}" />
+      <input type="hidden" name="old_brandname" value="{$brand.brand_name}" />
+      <input type="hidden" name="brand_id" value="{$brand.brand_id}" />
+      <input type="hidden" name="old_brandlogo" value="{$brand.brand_logo}">
+    </td>
+  </tr>
+</table>
+</form>
+</div>
+{insert_scripts files="js/utils.js,js/validator.js"}
+{literal}
+<script language="JavaScript">
+/**
+ * 检查表单输入的数据
+ */
+function validate(){
+    var brand_name = document.getElementById('brand_name').value;
+    if(brand_name){
+        return true;
+    }else{
+        alert('品牌名称不能为空');
+        return false
+    }
+}
+
+</script>
+{/literal}
+{include file="pagefooter.htm"}

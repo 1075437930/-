@@ -1,0 +1,52 @@
+{include file="pageheader.htm"}
+
+{insert_scripts files="js/utils.js,js/listtable.js,js/jquery-1.6.2.min.js"}
+
+<!-- 分销搜索 -->
+
+{include file="supplier_pay_module_search.htm"}
+
+<form method="post" action="index.php" name="listForm">
+
+<!-- start ad position list -->
+
+<div class="list-div" id="listDiv">
+
+{include file="supplier_pay_module_div.htm"}
+
+</div>
+
+</form>
+
+<script type="text/javascript">
+
+    listTable.recordCount = {$record_count};
+
+    listTable.pageCount = {$page_count};
+
+    listTable.act = 'suppaymodule';
+
+    listTable.query = "query";
+
+    {foreach from = $filter item = item key = key}
+
+    listTable.filter.{$key} = '{$item}';
+
+    {/foreach}
+
+
+    onload = function ()
+
+    {
+
+        listTable.query = "query";
+
+    }
+
+</script>
+
+
+{include file="pagefooter.htm"}
+
+
+

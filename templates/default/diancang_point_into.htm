@@ -1,0 +1,106 @@
+<!-- $Id: tag_edit.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="js/validator.js,js/transport.org.js}
+<div class="main-div">
+<form method="post" action="index.php" name="theForm" onSubmit="return validate()">
+<table cellspacing="1" cellpadding="3" width="100%">
+  <tr>
+    <td class="label">代金卷名称</td>
+    <td>
+	<textarea rows="2" cols="30" name="point_name" id="point_name" maxlength="200" placeholder="请添加代金卷名称">{$pointinto.point_name}</textarea><span class="require-field">*</span>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">代金卷金额</td>
+    <td>
+	 <input name="point_pic" type="text" id="point_pic" value="{$pointinto.point_pic}" maxlength="60" placeholder="200" /><span class="require-field">*</span>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">限购买金额</td>
+    <td>
+	 <input name="buy_pic" type="text" id="buy_pic" value="{$pointinto.buy_pic}" placeholder="20000" maxlength="60" /><span class="require-field">*指本卷最低购买多少才能使用</span>
+    </td>
+  </tr>
+   <tr>
+    <td class="label">代金卷期限(天)</td>
+    <td>
+	 <input name="valid_time" type="text" id="valid_time" value="{$pointinto.valid_time}" placeholder="7"  maxlength="60" /><span class="require-field">*如7天到期就添加7(开始时间为用户获得代金卷时间为准)</span>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">代金卷类型</td>
+    <td>
+	 <label><input type="radio" name="types" value="1" {if $pointinto.types == 1 }checked="true" {elseif  $pointinto.types == 0  } checked="true" {/if}/>单独</label>
+     <label><input type="radio" name="types" value="2" {if $pointinto.types == 2}checked="true"{/if}/>叠加</label>
+    </td>
+  </tr>
+  <tr>
+      <td class="label">代金卷使用范围</td>
+        <td>
+            <label><input type="radio" name="scope" value="0" {if $pointinto.scope == 0}checked="true"{/if}/>典藏产品</label>
+            <label><input type="radio" name="scope" value="1" {if $pointinto.scope == 1}checked="true"{/if}/>普通产品</label>
+            <label><input type="radio" name="scope" value="2" {if $pointinto.scope == 2}checked="true"{/if}/>所有产品</label>
+      </td>
+  </tr>
+  <tr>
+    <td class="label">发放类型</td>
+    <td>
+	 <label><input type="radio" onclick="no_style();" name="send_start" value="1" {if $pointinto.send_start == 1}checked="true"{/if}/>手动</label>
+     <label><input type="radio" onclick="xuan_style();" name="send_start" value="0" {if $pointinto.send_start == 0}checked="true"{/if}/>自动</label>
+    </td>
+  </tr>
+  <tr {if $pointinto.send_start != 0} style="display:none" {/if} id="send_start" >
+	  <td class="label">自动形式</td>
+	  <td><select name="send_start_style" id="send_start_style">
+		<option value="0" selected>请选择形式</option>
+		{html_options options=$stylesd selected=$style_id}
+	  </select></td>
+	</tr>
+  <tr>
+    <td class="label">代金卷描述</td>
+    <td><textarea rows="10" cols="30" name="point_brief" id="point_brief" maxlength="200" placeholder="请添代金卷描述">{$pointinto.point_brief}</textarea><span class="require-field">*</span>
+    </td>
+  </tr>
+  
+  <tr>
+    <td colspan="2" align="center">
+      <input type="submit" class="button" value="{$lang.button_submit}" />
+      <input type="reset" class="button" value="{$lang.button_reset}" />
+      <input type="hidden" name="pointid" value="{$pointinto.point_id}" />
+      <input type="hidden" name="act" value="vouchers" />
+      <input type="hidden" name="op" value={$form_op} /></td>
+  </tr>
+</table>
+</form>
+</div>
+
+{literal}
+<script language="JavaScript">
+<!--
+
+/**
+ * 检查表单输入的数据
+ */
+function validate()
+{
+    validator = new Validator("theForm");
+    validator.required('point_name', '代金卷名称不能为空');
+	validator.required('point_brief', '代金卷描述不能为空');
+	validator.required('point_pic', '代金卷金额不能为空');
+	validator.required('buy_pic', '代金卷x限购金额不能为空');
+    return validator.passed();
+}
+
+ function xuan_style(){
+	 document.getElementById('send_start').style.display = "table-row";
+ }
+
+ function no_style(){
+	document.getElementById('send_start').style.display = "none";	
+ }
+
+//-->
+</script>
+{/literal}
+{include file="pagefooter.htm"}

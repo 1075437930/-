@@ -1,0 +1,73 @@
+{include file="pageheader.htm"}
+<script language="JavaScript">
+<!--
+
+// 这里把JS用到的所有语言都赋值到这里
+
+{foreach from=$lang.calendar_lang key=key item=item}
+
+var {$key} = "{$item}";
+
+{/foreach}
+
+//-->
+</script>
+<script type="text/javascript" src="{$urls_dir}/js/calendar/calendar.js"></script>
+<link href="{$urls_dir}/js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+{insert_scripts files="js/topbar.js,js/utils.js,js/listtable.js,js/selectzone.js,js/common.js"}
+<script type="text/javascript" src="../js/calendar.php"></script>
+<link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+<style>
+	.goods_edit tr td,input{height:20px;}
+</style>
+
+  <table width="50%" border="0" align="center">
+    <caption><strong> {$lang.buyer_info} </strong></caption>
+    <tr height="100px;" class="goods_edit">
+      <td align="right"> 供货人: </td>
+      <td align="left" width="5%"> <input type="text" name="goodsin" id="supper_name"/> </td>
+	  <td align="right"> 结款时间: </td>
+      <td align="left" width="25%"> 
+	  <input type="text" name="start_time" maxlength="30" size="20" readonly="readonly" id="start_time_id" style="margin-top: 29px;"/>
+	  <input name="start_time_btn" type="button" id="start_time_btn" onclick="return showCalendar('start_time_id', '%Y-%m-%d %H:%M', '24', false, 'start_time_btn');" value="{$lang.btn_select}" class="button" style="height:25px;"/>
+	  </td>
+	  <td align="right"> 结款金额(￥): </td>
+      <td align="left" width="10%"> <input type="text" name="cost_pay" id="cost_pay_id" value="0.00"/> </td>
+	</tr>
+	<tr>
+		<td colspan="3" align="right"><input name="print_edit" type="submit" class="button" id="query" value="打印"  style="height:25px;" onclick="print_suppler()"/></td>
+		<td colspan="3" align="left"><input name="cancel" type="reset" class="button" value="取消"  style="height:25px;" onclick="javascript:history.back();"/></td>
+	</tr>
+	<tr height="500px;">
+	
+	</tr>
+  </table>
+  
+  <script>
+	function print_suppler(){
+		var supplierName = $("#supper_name").val();
+		var startTime = $("#start_time_id").val();
+		var costPayValue = $("#cost_pay_id").val();
+		if(supplierName.length == 0){
+			alert('输入的供货商不能为空！');
+			return;
+		}
+		if(startTime.length == 0){
+			alert('输入的结款时间不能为空！');
+			return;
+		}
+		if($.isNaN(costPayValue)){
+			alert('输入的金额格式不正确！');
+			return;
+		}
+		if(parseFloat(costPayValue)<=0){
+			alert('输入的金额必须大于0！');
+			return;
+		}
+		window.open('index.php?act=order&op=info&order_id={$order.order_id}&print_goodsin=1&supplier_name='+supplierName+'&start_time='+startTime+'&cost_pay='+costPayValue);
+	}
+
+  
+  </script>
+
+{include file="pagefooter.htm"}

@@ -1,0 +1,44 @@
+<!-- $Id: user_rank.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{if $full_page}
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<!-- start ads list -->
+<div class="list-div" id="listDiv">
+{/if}
+<table cellspacing='1' id="list-table">
+  <tr>
+    <th>月份</th>
+    <th>年利率比例</th>    <th>收益类型</th>
+    <th>{$lang.handler}</th>
+  </tr>
+  {foreach from=$yuebili_list item=yuebili} 
+  <tr>
+    <td class="first-cell" align="center" >{$yuebili.yuefen}月</td>
+    <td align="center"><span >{$yuebili.bili} %</span></td>    <td align="center"><span >{if $yuebili.stypes == 1} 淘金币{else}余额{/if}</span></td>
+    <td align="center">
+    <a href="index.php?act=dcyueset&op=edit&set_id={$yuebili.set_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" border="0" height="16" width="16" />编辑</a>	<a href="javascript:;" onclick="listTable.remove({$yuebili.set_id}, '{$lang.drop_confirm}','remove')" title="{$lang.remove}"><img src="images/icon_drop.gif" border="0" height="16" width="16">删除</a>	</td>
+  </tr>
+   {foreachelse}
+    <tr><td class="no-records" colspan="4">暂无内容,请添月份比例</td></tr>
+  {/foreach}	<tr>		<td align="right" nowrap="true" colspan="4">{include file="page.htm"}</td>	  </tr>
+  </table>	 
+
+{if $full_page}
+</div>
+<!-- end user ranks list -->
+</form>
+<script type="Text/Javascript" language="JavaScript">
+listTable.recordCount = {$record_count};  
+listTable.pageCount = {$page_count};
+listTable.act = "dcyueset";   
+listTable.query = "lists_query";  
+{foreach from=$filter item=item key=key}    
+listTable.filter.{$key} = '{$item}';  
+{/foreach}  
+{literal}  
+ 
+{/literal}
+</script>
+{include file="pagefooter.htm"}
+{/if}

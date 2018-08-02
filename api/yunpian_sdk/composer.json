@@ -1,0 +1,5 @@
+{
+	"require": {
+        "yunpian/yunpian-php-sdk" : "~1.0"
+    }
+}

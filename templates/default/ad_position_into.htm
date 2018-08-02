@@ -1,0 +1,51 @@
+<!-- $Id: ads_info.htm 14216 2008-03-10 02:27:21Z testyang $-->
+{include file="pageheader.htm"}
+<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+<link href="{$urls_dir}/js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+<div class="main-div">
+    <form action="index.php" method="post" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+        <table width="100%" id="general-table">
+            <tr>
+                <td  class="label">
+                   <img src="images/notice.gif" width="16" height="16" border="0" alt="广告名称">广告位置名称</td>
+                <td>
+                    <input type="text" name="site_name1" value="{$dcimgsiteinto.site_name}" size="35" {if $bubianji eq 1} disabled="true" {/if}/><span class="require-field">*</span>					<input type="hidden" name="site_name" value="{$dcimgsiteinto.site_name}" size="35" />
+                </td>
+            </tr>
+            <tr>                <td  class="label">                   <img src="images/notice.gif" width="16" height="16" border="0" alt="广告位宽度">广告位宽度</td>                <td>                    <input type="text" name="width_w" value="{$dcimgsiteinto.width_w}" size="35" /><span class="require-field">*</span>                </td>			 </tr>			 <tr>                <td  class="label">                   <img src="images/notice.gif" width="16" height="16" border="0" alt="广告位高度">广告位高度</td>                <td>                    <input type="text" name="high_h" value="{$dcimgsiteinto.high_h}" size="35" /><span class="require-field">*</span>                </td>            </tr>			<tr>                <td  class="label">展示端口</td>                <td>                    <input type="radio" name="media_type" value="1" {if $dcimgsiteinto.media_type eq 1} checked="true" {/if} />app端                    <input type="radio" name="media_type" value="2" {if $dcimgsiteinto.media_type eq 2} checked="true" {/if} />电脑端					<input type="radio" name="media_type" value="3" {if $dcimgsiteinto.media_type eq 3} checked="true" {/if} />手机网页端                </td>            </tr>			<tr>                <td class="label">                   默认广告图                <td>                    <input type='file' name='default_img' size='35' />					{if $dcimgsiteinto.default_img}					<a href="{$dcimgsiteinto.default_img2}" target="_blank">						<img src="images/yes.gif" border="0" />					</a>					{else}					<img src="images/no.gif" />					{/if}					<input type="hidden" name="default_img2" value="{$dcimgsiteinto.default_img}" size="35" /><span class="require-field">*</span>                </td>            </tr>			<tr>				<td class="label">广告描述</td>				<td>				<textarea rows="5" cols="30" name="dic_comt" id="dic_comt" maxlength="200" placeholder="广告描述">{$dcimgsiteinto.dic_comt}</textarea><span class="require-field">*</span>				</td>			</tr>
+            <tr>
+                <td class="label">&nbsp;</td>
+                <td>
+                    <input type="submit" value="{$lang.button_submit}" class="button" />
+                    <input type="reset" value="{$lang.button_reset}" class="button" />
+                    <input type="hidden" name="act" value="ad_position" />
+                    <input type="hidden" name="op" value="insert" />
+                    <input type="hidden" name="site_id" value="{$dcimgsiteinto.site_id}" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/validator.js"></script>
+<script language="JavaScript">
+  
+    {literal}
+   
+
+    /**
+     * 检查表单输入的数据
+     */
+    function validate()
+    {
+        validator = new Validator("theForm");
+        validator.required("site_name1", '广告名称不能为空');		validator.required("width_w", '广告位宽度不能为空');		validator.required("high_h",'广告位高度不能为空');		validator.required("dic_comt",'广告描述不能为空');		
+
+        return validator.passed();
+    }
+
+   
+    //-->
+    {/literal}
+</script>
+{include file="pagefooter.htm"}

@@ -1,0 +1,233 @@
+<!-- $Id: order_info.htm 15544 2009-01-09 01:54:28Z zblikai $ -->
+
+{include file="pageheader.htm"}
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/common.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/selectzone.org.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/topbar.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<div class="list-div" style="margin-bottom: 5px">
+<table width="100%" cellpadding="3" cellspacing="1">
+  <tr>
+    <th colspan="4">原订单基本信息</th>
+  </tr>
+  <tr>
+    <td width="18%"><div align="right"><strong>订单号：</strong></div></td>
+    <td width="34%">{$dcback_order.order_sn}</td>
+    <td><div align="right"><strong>下单时间：</strong></div></td>
+    <td>{$dcback_order.order_time}</td>
+  </tr>
+  <tr>
+    <td width="18%"><div align="right"><strong>服务类型：</strong></div></td>
+    <td width="34%">退货退款</td>
+    <td><div align="right"><strong>退款方式：</strong></div></td>
+    <td>退款至账户余额 </td>
+  </tr>
+  <tr>
+    <td><div align="right"><strong>收货人：</strong></div></td>
+    <td>{$dcback_order.consignee|default:$lang.anonymous}</td>
+    <td><div align="right"><strong>地址：</strong></div></td>
+    <td>{$dcback_order.region}</td>
+  </tr>
+  <tr>
+    <td><div align="right"><strong>配送方式：</strong></div></td>
+    <td>{$dcback_order.shipping_name} </td>
+    <td><div align="right"><strong>配送费用：</strong></div></td>
+    <td>{$dcback_order.shipping_fee}</td>
+  </tr>
+  <tr>
+    <td><div align="right"><strong>发货单号：</strong></div></td>
+    <td >{$dcback_order.order_nos}</td>
+	<td><div align="right"><strong>发货时间：</strong></div></td>
+    <td>{$dcback_order.shipping_time}</td>
+  </tr>
+  </table>
+</div>
+<div class="list-div" style="margin-bottom: 5px">
+<table width="100%" cellpadding="3" cellspacing="1">
+  <tr>
+    <th colspan="4">退款/退货</th>
+    </tr>
+  <tr>
+    <td><div align="right" width="18%"><strong>退货时间：</strong></div></td>
+    <td width="34%">{$dcback_order.add_time}</td>
+    <td><div align="right"><strong>申请人用户名：</strong></div></td>
+    <td>{$dcback_order.user_name}<br /><span style="display: block">{$dcback_order.user_tel1}</span><span style="display: none">{$dcback_order.user_tel}</span><a href="javascript:" id="showtel">点击查看</a></td>
+  </tr>
+  <tr>
+    {if $dcback_order.look_goods}
+      <td><div align="right" width="18%"><strong>看货开始时间：</strong></div></td>
+      <td width="34%">{$dcback_order.shipping_time}</td>
+      <td><div align="right"><strong>看货到期时间</strong></div></td>
+      <td>{$dcback_order.look_end_time}</td>
+    {else}
+      <td><div align="right" width="18%"><strong>典藏到期时间：</strong></div></td>
+      <td width="34%">{$dcback_order.new_end_time}</td>
+      <td><div align="right"><strong>典藏过期时间</strong></div></td>
+      <td>{$dcback_order.new_end_time2}</td>
+    {/if}
+
+  </tr>
+  <tr>
+    <td><div align="right"><strong>退货/维修原因：</strong></div></td>
+    <td colspan=3>{$dcback_order.back_reason}</td>
+	</tr>
+  <tr>
+    <td><div align="right"><strong>用户退回商品所用快递：</strong></div></td>
+    <td>{$dcback_order.shipping_name|escape}</td>
+    <td><div align="right"><strong>运单号：</strong></div></td>
+    <td>{$dcback_order.invoice_no}</td>
+  </tr>
+</table>
+</div>
+<div class="list-div" style="margin-bottom: 5px">
+<table width="100%" cellpadding="3" cellspacing="1">
+  <tr>
+    <th colspan="2">客户留言</th>
+  </tr>
+  <tr>
+    <td align="right" width="18%"><div >（{$dcback_order.add_time}）<strong>客户：</strong></div></td>
+    <td align="left">{$dcback_order.postscript}</td>
+  </tr>
+</table>
+</div>
+<div class="list-div" style="margin-bottom: 5px">
+
+<table width="100%" cellpadding="3" cellspacing="1">
+  <tr>
+    <th colspan="4" scope="col">原订单-商品信息</th>
+    </tr>
+  <tr>
+    <td scope="col"><div align="center"><strong>商品名称 </strong></div></td>
+    <td scope="col"><div align="center"><strong>产品编号</strong></div></td>
+    <td scope="col"><div align="center"><strong>产品图片</strong></div></td>
+    <td scope="col"><div align="center"><strong>产品价格</strong></div></td>
+  </tr>
+ {foreach from=$order_goods item=goods_info}
+ <tr>
+ <td>{$goods_info.goods_name}</td>
+ <td>{$goods_info.goods_sn}</td>
+ <td><img src="{$goods_info.goods_url}" width="30" height="30" border="0"></td>
+ <td>{$goods_info.dc_goods_price}</td>
+ </tr>
+ {/foreach}
+  <tr>
+    <th colspan="4" scope="col">退货/返修-商品信息</th>
+    </tr>
+  <tr>
+    <td scope="col"><div align="center"><strong>商品名称 </strong></div></td>
+    <td scope="col"><div align="center"><strong>产品图片</strong></div></td>
+	<td scope="col"><div align="center"><strong>应退金额</strong></div></td>
+	<td scope="col"><div align="center"><strong>退货状态</strong></div></td>
+  </tr>
+  <tr>
+    <td>{$dcback_order.goods_name}</td>
+
+    <td><div align="left"><img src="{$dcback_order.imgsurl}" width="30" height="30" border="0"></div></td>
+    <td><div align="left">{$dcback_order.refund_money}</div></td>
+	<td>{$dcback_order.status_back_val}</td>
+  </tr>
+  <tr>
+  <td colspan="4"><strong>此单为整单退款，订单已付金额（应退金额）：{$dcback_order.refund_money}</strong></td>
+  </tr>
+</table>
+</div>
+<div class="list-div" style="margin-bottom: 5px">
+<form  action="index.php?act=dcback&op=operate" method="post">
+<table cellpadding="3" cellspacing="1">
+  <tr>
+    <th colspan="6">操作信息</th>
+  </tr>
+  <tr>
+    <td><div align="right"><strong>操作备注：</strong></div></td>
+  <td colspan="5"><textarea name="action_note" cols="80" rows="3"></textarea></td>
+    </tr>
+  <tr>
+    <td><div align="right"></div>
+      <div align="right"><strong>当前可执行操作：</strong> </div></td>
+    <td colspan="5">
+	{if $dcback_order.status_back lt 6}
+		{if $dcback_order.status_back eq 5}
+			{if $operable_list.ok}
+			<input name="ok" type="submit" value="通过申请" class="button" />
+			{/if}
+			{if $operable_list.no}
+			<input name="no" type="submit" value="拒绝申请" class="button" />
+			{/if}
+		{else}
+			{if $operable_list.confirm  && ($dcback_order.status_back eq 2 || $dcback_order.status_back eq 0)  && $dcback_order.status_refund eq 0 }
+			<input name="confirm" type="submit" value="收到用户寄回商品" class="button" />
+			<input name="cancel_apply" type="submit" value="取消退货" class="button" /> <!--add by xurongxin20170125-->
+			{/if} 
+			{if  $dcback_order.status_back eq 1 && $dcback_order.status_refund eq 0 }
+			<input name="refund" type="submit" value="去退款" class="button" onClick="return window.confirm('点击后直接退款到用户的余额上面，是否确定');" />
+			{/if}
+			{if $operable_list.backshipping && $dcback_order.status_back eq 1}
+	        <input name="backshipping" type="submit" class="button" value="换出商品寄出" />
+	        {/if}
+			{if $operable_list.backfinish && ($dcback_order.status_refund eq 1 || $dcback_order.status_back eq 2)}
+			<input name="backfinish" type="submit" value="完成" class="button" onClick="return window.confirm('点击完成相当于不退款只完成退款订单是否确定');" />
+			{/if} 
+        {/if}
+	{else}
+		{if $dcback_order.status_back eq 6}
+		此单已被管理员拒绝
+		{/if}
+		{if $dcback_order.status_back eq 7}
+		此单已被系统取消
+		<input name="recover_apply" type="submit" value="恢复待收货状态" class="button" />  <!--add by xurongxin20170125-->
+		{/if}
+		{if $dcback_order.status_back eq 8}
+		此单已被用户自行取消
+		{/if}
+	{/if}
+	<input name="dcback_id" type="hidden" value="{$dcback_order.back_id}">
+	</td>
+  </tr>
+  <tr>
+    <th>操作者</th>
+    <th>操作时间</th>
+    <th>退换货状态</th>
+    <th>退款状态</th>
+    <th>备注</th>
+  </tr>
+  {foreach from=$action_list item=action}
+  <tr>
+    <td><div align="center">{$action.action_user}</div></td>
+    <td><div align="center">{$action.action_time}</div></td>
+    <td><div align="center">
+		{$action.status_back}
+    </div></td>
+    <td><div align="center">{$action.status_refund}</div></td>
+    <td>{$action.action_note|nl2br}</td>
+  </tr>
+  {/foreach}
+</table>
+</form>
+</div>
+{literal}
+<script language="JavaScript">
+{/literal}
+
+{literal}
+ 
+$("#showtel").click(function(){
+    $.ajax({
+      type: "post",
+      url: "index.php?act=dcback&op=check",
+      data: {},
+      dataType: "json",
+      success: function(data){
+        if(data.status == 1){
+          $("#showtel").prev().css("display",'block');
+          $("#showtel").prev().prev().css("display",'none');
+        }else{
+          alert("你没有权限");
+        }
+      }
+    });
+  })
+</script>
+{/literal}
+
+{include file="pagefooter.htm"}

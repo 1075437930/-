@@ -1,0 +1,224 @@
+{if $full_page}
+<!-- $Id: sale_order.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+<script language="JavaScript">
+<!--
+
+// 这里把JS用到的所有语言都赋值到这里
+
+{foreach from=$lang.calendar_lang key=key item=item}
+
+var {$key} = "{$item}";
+
+{/foreach}
+
+//-->
+</script>
+<script type="text/javascript" src="{$urls_dir}/js/calendar/calendar.js"></script>
+<link href="{$urls_dir}/js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{$urls_dir}/js/utils.js"></script>
+<script type="text/javascript" src="{$urls_dir}/js/listtable.js"></script>
+<style>
+.colors {
+	color:#FF0000;
+}
+.colors a:link {
+    color: #FF0000;
+}
+</style>
+<div class="form-div">
+  <form name="TimeInterval"  action="javascript:getList()" style="margin:0px">
+    <tr>
+        <td class="label">开始日期
+        <td>
+          <input name="start_time" type="text" id="start_time" size="22" value='{$start_date}'>
+          <input name="selbtn1" type="button" id="selbtn1" onclick="return showCalendar('start_time', '%Y-%m-%d', false, false, 'selbtn1');" value="{$lang.btn_select}" class="button" /></td>
+      </tr>
+      <tr>
+        <td class="label">结束日期
+        <td>
+          <input name="end_time" type="text" id="end_time" size="22" value='{$end_date}' />
+          <input name="selbtn2" type="button" id="selbtn2" onclick="return showCalendar('end_time', '%Y-%m-%d', false, false, 'selbtn2');" value="{$lang.btn_select}" class="button" /></td>
+      </tr>
+    <input type="hidden" name="userid" value="{$userid}"/>
+	<input type="submit" name="submit" value="{$lang.query}" class="button" />
+
+  </form>
+	 <span style="color: #f33e3e;">备注 : {$userinto.youhuio}</span><br><span style="color: #f33e3e;">管理员备注 : 修改返点点击确定以后会有对话框提示确定返点或者不返点。点击取消以后这个订单就不能在返点操作！！！！</span>
+</div>
+
+<form method="POST" action="" name="listForm">
+<div class="list-div" id="listDiv">
+{/if}
+{if $userinto}
+  <table width="100%" cellspacing="1" cellpadding="3">
+    <th>{$lang.payuser} : {$userinto.username}</th>
+    <th>{$lang.overall_sum} : {$userinto.zongpic}</th>
+    <th>{$lang.zong_paysum} : {$userinto.zongfanpic}</th>
+    <th>{$lang.zong_yqrsum} : {$userinto.zongyqfanpic}</th>
+  </table>
+{/if}
+  <table width="100%" cellspacing="1" cellpadding="3">
+     <tr>
+      <th>{$lang.payuser}</th>
+	  <th>{$lang.goods_sn}</th>
+	  <th>{$lang.order_sn}</th>
+	  <th>{$lang.goods_imgs}</th>
+      <th>{$lang.goodspic}</th>
+      <th>{$lang.paynum}</th>
+	  <th>{$lang.paypic}</th>
+      <th>{$lang.posername}</th>
+      <th>{$lang.payfan}</th>
+	  <th>{$lang.poserfan}</th>
+	  <th>{$lang.paytime}</th>
+	  <th>{$lang.addtime}</th>
+	  <th>{$lang.order_circs}</th>
+      <th>{$lang.caozuo}</th>
+    </tr>
+  {foreach from=$goods_order_data item=list name=val}
+{if $list.goods_sn }
+    <tr align="center">
+      <td>
+		 <span style="margin-bottom: 2px; line-height: 14px; display: block;"><a href="index.php?act=account_log&op=lists&user_id={$list.user_id}" target="_blank">{$userinto.username}</a></span>
+		 <span style="border: 1px #6DD26A solid; background-color: #6DD26A; padding: 1px 2px 0px 2px; color: white; display: inline; border-radius: 2px;">{$userinto.alias}</span>
+	     <span style="border: 1px #f40d0d solid; background-color: #f40d0d; padding: 1px 2px 0px 2px; color: white; display: inline; border-radius: 2px;">{$userinto.level_name}</span>
+	  </td>
+	  <td align="center"><a href="{$list.goods_url}" target="_blank">{$list.goods_sn}</a></td>
+	  <td align="center" ><a href="index.php?act=order&op=info&order_id={$list.order_id}" target="_blank">{$list.order_sn}</a></td>
+	  
+	  <td align="center"><a href="{$list.goods_url}" target="_blank"><img src="{$list.goods_image}" border="0" height="50" width="50" /></a></td>
+      <td align="center">{$list.goods_pay_price}</td>
+      <td>{$list.goods_number}/个</td>
+	  
+      <td align="center" >{$list.money_paid}</td>
+	  
+      <td align="center">
+	  <span style="margin-bottom: 2px; line-height: 14px; display: block;"><a href="index.php?act=account_log&op=lists&user_id={$list.parent_id}" target="_blank">{$list.parentname}</a></span>
+	  <span style="border: 1px #6DD26A solid; background-color: #6DD26A; padding: 1px 2px 0px 2px; color: white; display: inline; border-radius: 2px;">{$list.parentname2}</span>
+		</td>
+	  
+      <td align="center" >{$list.fanli_pic}/元</td>
+	  <td align="center" >{$list.fandian_yq_pic}/元</td>
+	  
+	  <td align="center">{$list.pay_time}</td>
+	  <td align="center">{$list.add_time}</td>
+	  <td align="center">{$list.statustpye}</td>
+
+      <td align="center" >
+	  {if $list.xiug == 1}
+		{if $list.fandian_pay == 1}
+			<span style="border: 1px #6DD26A solid; background-color: #6DD26A; padding: 4px 2px 4px 2px; color: #f1f1f1; display: inline; border-radius: 2px;">已返点(购买)</span>
+		{elseif $list.fandian_pay == 0}
+			<a href="javascript:editpay({$list.order_id},{$list.user_id})" title="{$lang.fandiancz}">
+				<span style="border: 1px #f40d0d solid; background-color: #f40d0d; padding: 4px 2px 4px 2px; color: #f1f1f1; display: inline; border-radius: 2px;">(购买)返点操作</span>
+			 </a>
+		{else}
+			<span style="border: 1px #36ba4a solid; background-color: #36ba4a; padding: 4px 2px 4px 2px; color: #f1f1f1; display: inline; border-radius: 2px;">不参于(购买)返点</span>
+		{/if}
+		<br>
+		<br>
+		{if $list.fandian_yq == 1}
+			<span style="border: 1px #6DD26A solid; background-color: #6DD26A; padding: 4px 2px 4px 2px; color: #f1f1f1; display: inline; border-radius: 2px;">已返点(邀请)</span>
+		{elseif $list.fandian_yq == 0}
+			<a href="javascript:edityq({$list.order_id},{$list.user_id})" title="{$lang.fandiancz}">
+				<span style="border: 1px #fe6c00 solid; background-color: #fe6c00; padding: 4px 2px 4px 2px; color: #f1f1f1; display: inline; border-radius: 2px;">(邀请)返点操作</span>
+			 </a>
+		{else}
+			<span style="border: 1px #36ba4a solid; background-color: #36ba4a; padding: 4px 2px 4px 2px; color: #f1f1f1; display: inline; border-radius: 2px;">不参于(邀请)返点</span>
+		{/if}
+	  {else}
+		<span style="border: 1px #573dfa solid; background-color: #573dfa; padding: 4px 2px 4px 2px; color: #f1f1f1; display: inline; border-radius: 2px;">{$list.statustpye}</span>
+	  {/if}
+	</td>
+	
+    </tr>
+	{/if}	
+  {foreachelse}
+    <tr><td class="no-records" colspan="13">{$lang.no_records}</td></tr>
+  {/foreach}
+  </table>
+  <table id="page-table" cellspacing="0">
+  <tr>
+    <td>&nbsp;</td>
+    <td align="right" nowrap="true">
+    {include file="page.htm"}
+    </td>
+  </tr>
+  </table>
+{if $full_page}
+</div>
+</form>
+
+<script type="Text/Javascript" language="JavaScript">
+listTable.recordCount = {$record_count};
+listTable.pageCount = {$page_count};
+listTable.query = 'info_query';
+listTable.act = 'fenxiao';
+{foreach from=$filter item=item key=key}
+listTable.filter.{$key} = '{$item}';
+{/foreach}
+{literal}
+
+function editpay(orderids,userid)
+{	
+	var frm =  document.forms['TimeInterval'];
+	if(frm.elements['start_time'].value){
+       var strat = gettimewss(frm.elements['start_time'].value +' 00:00:00')-(8*3600);
+    }else{
+       var strat = '';
+    } 
+    if(frm.elements['end_time'].value){
+       var end_date = gettimewss(frm.elements['end_time'].value + ' 23:59:59')-(8*3600);
+    }else{
+       var end_date = '';
+    }      	  
+	var mgas = '确定购买返点,如果取消，表示这个订单不用在购买返点，看清楚在操作！！！！！'
+    if(window.confirm(mgas)){
+		 window.location.href="index.php?act=fenxiao&op=editpay&order_id="+orderids+"&add=1&userid="+userid+"&start_date="+strat+"&end_date="+end_date;
+	}else{
+		 window.location.href="index.php?act=fenxiao&op=editpay&order_id="+orderids+"&add=0&userid="+userid+"&start_date="+strat+"&end_date="+end_date;
+	}
+}
+
+function edityq(orderids,userid)
+{
+	var frm =  document.forms['TimeInterval'];
+	if(frm.elements['start_time'].value){
+       var strat = gettimewss(frm.elements['start_time'].value +' 00:00:00')-(8*3600);
+    }else{
+       var strat = '';
+    } 
+    if(frm.elements['end_time'].value){
+       var end_date = gettimewss(frm.elements['end_time'].value + ' 23:59:59')-(8*3600);
+    }else{
+       var end_date = '';
+    }      	  
+	var mgas = '确定邀请人返点,如果取消，表示这个订单不用在邀请人返点，看清楚在操作！！！！！'
+    if(window.confirm(mgas)){
+		 window.location.href="index.php?act=fenxiao&op=edityq&order_id="+orderids+"&add=1&userid="+userid+"&start_date="+strat+"&end_date="+end_date;
+	}else{
+		 window.location.href="index.php?act=fenxiao&op=edityq&order_id="+orderids+"&add=0&userid="+userid+"&start_date="+strat+"&end_date="+end_date;
+	}
+}
+
+function getList()
+{
+    var frm =  document.forms['TimeInterval'];
+    listTable.filter['start_date'] = gettimewss(frm.elements['start_time'].value +' 00:00:00');
+    listTable.filter['end_date'] = gettimewss(frm.elements['end_time'].value + ' 23:59:59');
+	listTable.filter['page'] = 1;
+	listTable.query = 'info_query';
+    listTable.loadList();
+}
+
+function gettimewss(stringTime)
+{
+	var timestamp2 = Date.parse(new Date(stringTime));
+	 rtimestamp2 = timestamp2 / 1000;
+	
+	return rtimestamp2;
+}
+</script>
+{/literal}
+{include file="pagefooter.htm"}
+{/if}
